@@ -58,8 +58,11 @@ GROUP BY o.custid, c.contactname;
 -- Task 3 -- error corrected
 -- Correct the query so that it will execute properly.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
-
-
+SELECT o.custid, c.contactname, c.city 
+FROM Sales.Orders AS o 
+INNER JOIN Sales.Customers AS c ON c.custid = o.custid 
+WHERE o.empid = 5 
+GROUP BY o.custid, c.contactname, c.city
 
 ---------------------------------------------------------------------
 -- Task 4 
@@ -69,6 +72,11 @@ GROUP BY o.custid, c.contactname;
 -- Filter the results to include only the orders from the sales employee whose empid equal five.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
 ---------------------------------------------------------------------
+SELECT o.custid, YEAR(o.orderdate) AS orderyear, c.contactname, c.city 
+FROM Sales.Orders AS o 
+INNER JOIN Sales.Customers AS c ON c.custid = o.custid 
+WHERE o.empid = 5 
+GROUP BY o.custid, YEAR(o.orderdate), c.contactname, c.city;
 
 ---------------------------------------------------------------------
 -- Task 5 
@@ -78,6 +86,13 @@ GROUP BY o.custid, c.contactname;
 -- that were ordered in the year 2008.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
 ---------------------------------------------------------------------
-
-
+SELECT Categories.categoryname
+FROM Sales.Orders
+INNER JOIN Sales.OrderDetails
+	ON Orders.orderid = OrderDetails.orderid
+INNER JOIN Production.Products
+	ON OrderDetails.productid = Products.productid
+INNER JOIN Production.Categories
+	ON Products.categoryid = Categories.categoryid
+WHERE year(Orders.orderdate) = 2008
 ----------------------------------------------------------

@@ -17,7 +17,11 @@ GO
 -- total sales amount in descending order.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
 ---------------------------------------------------------------------
-
+SELECT O.OrderID, SUM(OD.Qty * OD.UnitPrice) AS SalesAmount
+FROM Sales.Orders AS O
+INNER JOIN Sales.OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY O.OrderID
+ORDER BY SalesAmount DESC;
 
 ---------------------------------------------------------------------
 -- Task 2
@@ -27,7 +31,11 @@ GO
 -- Use the aliases nooforderlines and avgsalesamountperorderline, respectively.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
 ---------------------------------------------------------------------
-
+SELECT O.OrderID, SUM(OD.Qty * OD.UnitPrice) AS SalesAmount, COUNT(*) AS NoOfOrderLines, AVG(OD.Qty * OD.UnitPrice) AS AvgSalesAmountPerOrderLine
+FROM Sales.Orders AS O
+INNER JOIN Sales.OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY O.OrderID
+ORDER BY SalesAmount DESC
 
 
 ---------------------------------------------------------------------
@@ -40,7 +48,11 @@ GO
 -- Order the result by the yearmonthno calculated column.
 -- Provide your TSQL Solution (even if with errors) and review the model solution. 
 ---------------------------------------------------------------------
-
+SELECT YEAR(O.OrderDate) * 100 + MONTH(O.OrderDate) AS YearMonthNo, SUM(OD.Qty * OD.UnitPrice) AS SalesAmount
+FROM Sales.Orders AS O
+INNER JOIN Sales.OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY YEAR(O.OrderDate) * 100 + MONTH(O.OrderDate)
+ORDER BY YearMonthNo
 
 
 ---------------------------------------------------------------------
@@ -65,4 +77,13 @@ GO
 -- MAX aggregate functions. What are their values in the COUNT columns? 
 -- Why are they different?
 ---------------------------------------------------------------------
-
+SELECT C.CustID, C.ContactName, 
+SUM(OD.Qty * OD.UnitPrice) AS TotalSalesAmount, 
+MAX(OD.Qty * OD.UnitPrice) AS MaxSalesAmountPerOrderLine, 
+COUNT(*) AS NumberOfRows, 
+COUNT(O.OrderID) AS NumberOfOrderLines
+FROM Sales.Customers AS C
+LEFT OUTER JOIN Sales.Orders AS O ON C.CustID = O.CustID
+LEFT OUTER JOIN Sales.OrderDetails AS OD ON O.OrderID = OD.OrderID
+GROUP BY C.CustID, C.ContactName
+ORDER BY TotalSalesAmount DESC;
