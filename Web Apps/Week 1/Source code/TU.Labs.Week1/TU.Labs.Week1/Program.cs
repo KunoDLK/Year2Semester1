@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using TU.Labs.Week1;
-using System.Collections.Generic;
 
 Console.WriteLine("Hello, World!");
 List<Employee> employeeList = new List<Employee>();
