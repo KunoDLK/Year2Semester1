@@ -12,50 +12,12 @@ while (true)
       Console.WriteLine("3. Remove Employee");
       Console.WriteLine("4. Quit/Exit");
       // Check if user input is a valid integer
-      if (int.TryParse(Console.ReadLine(), out option))
+      if (int.TryParse(Console.ReadLine(), out optiont))
       {
             switch (option)
             {
                   case 1: // Add Employee
-                        string employeeName;
-                        // Ask the user to enter an Employee Name and Validate Employee Name
-                        while (true)
-                        {
-                              Console.WriteLine("Please enter an Employee Name (1-50 characters):");
-                              employeeName = Console.ReadLine();
-                              if (employeeName.Length >= 1 && employeeName.Length <= 50)
-                                    break;
-                              Console.WriteLine("Employee Name is not in the correct format!");
-                        }
-                        string employeeId;
-
-                        while (true)
-                        {
-                              Console.WriteLine("Please enter an Employee Id (a letter followed by two digits):");
-                              employeeId = Console.ReadLine().ToUpper();
-                              if (Regex.IsMatch(employeeId, @"^[A-Z][0-9]{2}$"))
-                                    break;
-                              Console.WriteLine("Employee ID is not in the correct format!");
-                        }
-
-                        // Ask the user to enter Hours Worked
-                        double hoursWorked;
-                        while (true)
-                        {
-                              Console.WriteLine("Please enter hours worked (1-100):");
-                              hoursWorked = Convert.ToDouble(Console.ReadLine());
-                              if (hoursWorked >= 1 && hoursWorked <= 100)
-                                    break;
-                              Console.WriteLine("Hours Worked is not in the correct format!");
-                        }
-                        // Create the Employee object
-                        Employee employee = new Employee(employeeName, employeeId, hoursWorked);
-                        // Calculate the weekly wage
-                        double weeklyWage = employee.CalculateWage();
-                        // Display the weekly wage with two decimal places
-                        Console.WriteLine($"The weekly wage is £{weeklyWage:F2}");
-                        // Add the employee to the list
-                        employeeList.Add(employee);
+                        NewMethod(employeeList);
                         break;
                   case 2: // List Employees
                         Console.WriteLine("Employee List:");
@@ -90,4 +52,47 @@ while (true)
             Console.WriteLine("Invalid input, please enter a valid option.");
       }
 
+}
+
+static void NewMethod(List<Employee> employeeList)
+{
+      string employeeName;
+      // Ask the user to enter an Employee Name and Validate Employee Name
+      while (true)
+      {
+            Console.WriteLine("Please enter an Employee Name (1-50 characters):");
+            employeeName = Console.ReadLine();
+            if (employeeName.Length >= 1 && employeeName.Length <= 50)
+                  break;
+            Console.WriteLine("Employee Name is not in the correct format!");
+      }
+      string employeeId;
+
+      while (true)
+      {
+            Console.WriteLine("Please enter an Employee Id (a letter followed by two digits):");
+            employeeId = Console.ReadLine().ToUpper();
+            if (Regex.IsMatch(employeeId, @"^[A-Z][0-9]{2}$"))
+                  break;
+            Console.WriteLine("Employee ID is not in the correct format!");
+      }
+
+      // Ask the user to enter Hours Worked
+      double hoursWorked;
+      while (true)
+      {
+            Console.WriteLine("Please enter hours worked (1-100):");
+            hoursWorked = Convert.ToDouble(Console.ReadLine());
+            if (hoursWorked >= 1 && hoursWorked <= 100)
+                  break;
+            Console.WriteLine("Hours Worked is not in the correct format!");
+      }
+      // Create the Employee object
+      Employee employee = new Employee(employeeName, employeeId, hoursWorked);
+      // Calculate the weekly wage
+      double weeklyWage = employee.CalculateWage();
+      // Display the weekly wage with two decimal places
+      Console.WriteLine($"The weekly wage is £{weeklyWage:F2}");
+      // Add the employee to the list
+      employeeList.Add(employee);
 }
