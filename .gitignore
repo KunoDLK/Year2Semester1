@@ -191,3 +191,5 @@ git_stats/*
 StyleCop.Cache
 bin
 obj
+Databases/ICA/Documents/Report.html
+Databases/ICA/Documents/Report.pdf

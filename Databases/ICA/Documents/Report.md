@@ -168,7 +168,27 @@ Return Data:
 #### Demo A2: Eliminating Duplicates with DISTINCT:
 
 ---
-Query:
+Query Without DISTINCT:
+```sql
+SELECT season 
+FROM dbo.games;
+```
+Output:
+```
+(51 rows affected)
+
+Completion time: 2023-10-19T09:21:56.9049219+01:00
+```
+Return Data:
+| Season   |
+| -------- |
+| Summer   |
+| Summer   |
+| Summer   |
+| Summer   |
+| Winter   |
+---
+Query With DISTINCT:
 ```sql
 SELECT DISTINCT season 
 FROM dbo.games;
@@ -185,7 +205,28 @@ Return Data:
 | Summer   |
 | Winter   |
 ---
-Query:
+Query Without DISTINCT:
+```sql
+SELECT sport_id 
+FROM dbo.event;
+```
+Output:
+```
+(66 rows affected)
+
+Completion time: 2023-10-12T11:18:53.8945653+01:00
+```
+Return Data:
+| sport_id |
+| -------- |
+| 54       |
+| 54       |
+| 18       |
+| 18       |
+| 18       |
+|...       |
+---
+Query With DISTINCT:
 ```sql
 SELECT DISTINCT sport_id 
 FROM dbo.event;
@@ -207,132 +248,728 @@ Return Data:
 |...|
 ---
 
+#### Demo A3: Using Column and Table Aliases Lesson
+---
+Query:
+```sql
+SELECT c.city_name, gc.games_id, p.full_name, m.medal_name
+FROM dbo.city AS c
+INNER JOIN dbo.games_city AS gc ON c.id = gc.city_id
+INNER JOIN dbo.games_competitor AS gcp ON gc.games_id = gcp.games_id
+INNER JOIN dbo.person AS p ON gcp.person_id = p.id
+INNER JOIN dbo.competitor_event AS ce ON gcp.person_id = ce.competitor_id
+INNER JOIN dbo.medal AS m ON ce.medal_id = m.id;
+```
+Output:
+```
+(265018 rows affected)
 
+Completion time: 2023-10-19T09:30:38.5251880+01:00
+```
+Return Data:
+| City Name | Games ID | Full Name | Medal Name |
+|-----------|----------|-----------|------------|
+| Barcelona | 1        | A Dijiang | NA         |
+| London    | 2        | A Lamusi  | NA         |
+| Antwerpen | 3        | Gunnar Nielsen Aaby | NA         |
+| Paris     | 4        | Edgar Lindenau Aabye | Gold       |
+| Calgary   | 5        | Christine Jacoba Aaftink | NA         |
+| Albertville | 6        | Christine Jacoba Aaftink | NA         |
+| Lillehammer | 7        | Christine Jacoba Aaftink | NA         |
+|...|...|...|...|
+---
 
-  * Demo A3: Using Column and Table Aliases Lesson
+#### Demo A4: Writing Simple CASE Expressions
+---
+Query:
+```sql
+SELECT 
+    CASE 
+        WHEN medal_id = 1 THEN 'Gold'
+        WHEN medal_id = 2 THEN 'Silver'
+        WHEN medal_id = 3 THEN 'Bronze'
+        ELSE 'No Medal'
+    END AS Medal
+FROM dbo.competitor_event;
+```
+Output:
+```
+(260971 rows affected)
 
-  * Demo A4: Writing Simple CASE Expressions
+Completion time: 2023-10-19T09:35:30.7045404+01:00
+```
+Return Data:
+| Medal |
+|------|
+| No Medal |
+| No Medal |
+| No Medal |
+| Gold |
+| No Medal |
+|...|
+---
 
-b) Module 4: Joining and Querying Multiple Tables
+### Module 4: Joining and Querying Multiple Tables
 
-  * Demo B1: How to provide data from 2 related tables with a Join
+#### Demo B1: How to provide data from 2 related tables with a Join
+---
+Query:
+```sql
+SELECT g.games_year, g.games_name, g.season, ce.event_id
+FROM dbo.games g
+JOIN dbo.competitor_event ce ON g.id = ce.event_id 
+```
+Output:
+```
+(59920 rows affected)
 
-  * Demo B2: How to Query with Inner Joins
+Completion time: 2023-10-19T09:55:03.0229889+01:00
+```
+Return Data:
+| games_year | games_name  | season  | event_id |
+| ---------- | ----------- | ------- | -------- |
+| 1992       | 1992 Summer | Summer  | 1        |
+| 2012       | 2012 Summer | Summer  | 2        |
+| 1920       | 1920 Summer | Summer  | 3        |
+| 1900       | 1900 Summer | Summer  | 4        |
+| 1988       | 1988 Winter | Winter  | 5        |
+|...|...|...|...|
+---
+#### Demo B2: How to Query with Inner Joins
+---
+Query:
+```sql
+SELECT c.city_name, g.games_year
+FROM dbo.city c
+INNER JOIN dbo.games_city gc ON c.id = gc.city_id
+INNER JOIN dbo.games g ON gc.games_id = g.id
+```
+Output:
+```
+(52 rows affected)
 
-  * Demo B3: How to Query with Outer Joins
+Completion time: 2023-10-19T09:40:29.7298306+01:00
+```
+Return Data:
+| City Name | Games Year |
+|-----------|------------|
+| Barcelona | 1992       |
+| London    | 2012       |
+| Antwerpen | 1920       |
+| Paris     | 1900       |
+| Calgary   | 1988       |
+|...|...|
+---
+#### Demo B3: How to Query with Outer Joins
+---
+Query:
+```sql
+SELECT gcp.age, p.full_name
+FROM dbo.games_competitor AS gcp
+LEFT OUTER JOIN dbo.person AS p ON p.id = gcp.person_id
+```
+Output:
+```
+(180252 rows affected)
 
-  * Demo B4: How Query with Cross Joins and Self Joins
+Completion time: 2023-10-19T09:59:59.4151085+01:00
+```
+Return Data:
+| age | full_name        |
+|-----|------------------|
+| 24  | A Dijiang        |
+| 23  | A Lamusi         |
+| 24  | Gunnar Nielsen Aaby |
+| 34  | Edgar Lindenau Aabye |
+| 21  | Christine Jacoba Aaftink |
+|...|...|
+---
+#### Demo B4: How Query with Cross Joins and Self Joins
+---
+Query:
+```sql
+SELECT c.id, c.city_name, g.id, g.games_year, g.games_name, g.season
+FROM dbo.city c
+CROSS JOIN dbo.games g;
+```
+Output:
+```
+(2142 rows affected)
 
-c) Module 5: Sorting and Filtering Data
+Completion time: 2023-10-19T10:08:22.9105966+01:00
+```
+Return Data:
+| id | games_year | games_name  | season |
+|----|------------|-------------|--------|
+| 51 | 1896       | 1896 Summer | Summer |
+| 4  | 1900       | 1900 Summer | Summer |
+| 44 | 1904       | 1904 Summer | Summer |
+| 45 | 1906       | 1906 Summer | Summer |
+| 47 | 1908       | 1908 Summer | Summer |
+|...|....|....|....|....|
+---
+### Module 5: Sorting and Filtering Data
 
-  * Demo C1: How to Sort Data
+#### Demo C1: How to Sort Data
+---
+Query:
+```sql
 
-  * Demo C2: How to Filter Data with Predicates
+```
+Output:
+```
 
-  * Demo C3: How to Filter Data with TOP and OFFSET-FETCH
+```
+Return Data:
 
-  * Demo C4: How to work with Unknown Values
+---
+#### Demo C2: How to Filter Data with Predicates
+---
+Query:
+```sql
 
-d) Module 6: Working with Data Types
+```
+Output:
+```
 
-  * Demo D1: Working with Data Type examples
+```
+Return Data:
 
-  * Demo D2: Working with Character Data
+---
+#### Demo C3: How to Filter Data with TOP and OFFSET-FETCH
+---
+Query:
+```sql
 
-  * Demo D3: Working with Date and Time Data
+```
+Output:
+```
 
-e) Module 7: Using DML to Modify Data
+```
+Return Data:
 
-  * Demo E1: Adding Data to Tables
+---
+#### Demo C4: How to work with Unknown Values
+---
+Query:
+```sql
 
-  * Demo E2: Modifying and Removing Data
+```
+Output:
+```
 
-  * Demo E3: Generating Automatic Column Values
+```
+Return Data:
 
-f) Module 8: Using Built-In Functions
+---
+### Module 6: Working with Data Types
 
-  * Demo F1: Writing Queries with Built-In Functions
+#### Demo D1: Working with Data Type examples
+---
+Query:
+```sql
 
-  * Demo F2: Using Conversion Functions
+```
+Output:
+```
 
-  * Demo F3: Using Logical Functions
+```
+Return Data:
 
-  * Demo F4: Using Functions to Work with NULL
+---
+#### Demo D2: Working with Character Data
+---
+Query:
+```sql
 
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo D3: Working with Date and Time Data
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### Module 7: Using DML to Modify Data
+
+#### Demo E1: Adding Data to Tables
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo E2: Modifying and Removing Data
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo E3: Generating Automatic Column Values
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### Module 8: Using Built-In Functions
+
+#### Demo F1: Writing Queries with Built-In Functions
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo F2: Using Conversion Functions
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo F3: Using Logical Functions
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### Demo F4: Using Functions to Work with NULL
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
 ## TSQL Part 2: SQL Server Coding Functions and Features
 
-2. TSQL09: Group and Aggregating Data
+### TSQL09: Group and Aggregating Data
 
-a) ICA Demo 1: Using Aggregate Functions
+#### ICA Demo 1: Using Aggregate Functions
+---
+Query:
+```sql
 
-b) ICA Demo 2: Using the GROUP BY Clause
+```
+Output:
+```
 
-c) ICA Demo 3: Filtering Groups with HAVING 
+```
+Return Data:
 
-3. TSQL10: Using Subqueries
+---
+#### ICA Demo 2: Using the GROUP BY Clause
+---
+Query:
+```sql
 
-a) ICA Demo 1: Writing Self-Contained Subqueries
+```
+Output:
+```
 
-b) ICA Demo 2: Writing Correlated Subqueries
+```
+Return Data:
 
-c) ICA Demo 3: Using the EXISTS Predicate with Subqueries
+---
+#### ICA Demo 3: Filtering Groups with HAVING 
+---
+Query:
+```sql
 
-4. TSQL11: Using Table Expressions
+```
+Output:
+```
 
-a) ICA Demo 1: Using Views
+```
+Return Data:
 
-b) ICA Demo 2: Using Inline TVFs
+---
+### TSQL10: Using Subqueries
 
-c) ICA Demo 3: Using Derived Tables
+#### ICA Demo 1: Writing Self-Contained Subqueries
+---
+Query:
+```sql
 
-d) ICADemo 4: Using CTEs
+```
+Output:
+```
 
-5. TSQL12: Using Views and Set Operators
+```
+Return Data:
 
-a) ICA Demo 1: Writing Queries using Union Intersect Except set operators
+---
+#### ICA Demo 2: Writing Correlated Subqueries
+---
+Query:
+```sql
 
-b) ICA Demo 2: More on set operators
+```
+Output:
+```
 
-c) ICA Demo 3: Create inline Table-valued Function
+```
+Return Data:
 
-6. TSQL13: Using Window Ranking, Offset, and Aggregate Functions
+---
+#### ICA Demo 3: Using the EXISTS Predicate with Subqueries
+---
+Query:
+```sql
 
-a) ICA TSQL Demo 1 - Partition By Row Number function
+```
+Output:
+```
 
-b) ICA TSQL Demo 2 - Windows Ranking (or Windows Rank with partition
+```
+Return Data:
 
-c) ICA TSQL Demo 3 - OVER Clause (or CTE Function with Over)
+---
+### TSQL11: Using Table Expressions
 
-d) ICA TSQL Demo 4 - Writing Aggregate function in Partition By
+#### ICA Demo 1: Using Views
+---
+Query:
+```sql
 
-7. TSQL14: Pivoting and Grouping Sets
+```
+Output:
+```
 
-a) ICA Demo 1: Working with Grouping Sets
+```
+Return Data:
 
-b) ICA Demo 2: Writing Queries with PIVOT and UNPIVOT
+---
+#### ICA Demo 2: Using Inline TVFs
+---
+Query:
+```sql
 
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 3: Using Derived Tables
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICADemo 4: Using CTEs
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### TSQL12: Using Views and Set Operators
+
+#### ICA Demo 1: Writing Queries using Union Intersect Except set operators
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 2: More on set operators
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 3: Create inline Table-valued Function
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### TSQL13: Using Window Ranking, Offset, and Aggregate Functions
+
+#### ICA TSQL Demo 1 - Partition By Row Number function
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA TSQL Demo 2 - Windows Ranking (or Windows Rank with partition
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA TSQL Demo 3 - OVER Clause (or CTE Function with Over)
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA TSQL Demo 4 - Writing Aggregate function in Partition By
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### TSQL14: Pivoting and Grouping Sets
+
+#### ICA Demo 1: Working with Grouping Sets
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 2: Writing Queries with PIVOT and UNPIVOT
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
 ## TSQL Part 3: SQL Server Programming
 
-8. TSQL15: Executing Stored Procedures
+### TSQL15: Executing Stored Procedures
 
-a) ICA Demo 1: T-SQL Stored Procedure
+#### ICA Demo 1: T-SQL Stored Procedure
+---
+Query:
+```sql
 
-b) ICA Demo 2: TSQL Stored Procedures with Parameters
+```
+Output:
+```
 
-9. TSQL16: Programming with T-SQL
+```
+Return Data:
 
-a) ICA Demo 1: T-SQL programming and Stored Procedure
+---
+#### ICA Demo 2: TSQL Stored Procedures with Parameters
+---
+Query:
+```sql
 
-b) ICA Demo 2: T-SQL programming with Parameters
+```
+Output:
+```
 
-10. TSQL Module 17: Implementing Error Handling
+```
+Return Data:
 
-a) ICA Demo 1: Implementing T-SQL Error Handling
+---
+### TSQL16: Programming with T-SQL
 
-b) ICA Demo 2: Implementing Structured Exception Handling
+#### ICA Demo 1: T-SQL programming and Stored Procedure
+---
+Query:
+```sql
 
-11. TSQL Module 18: Implementing Transactions
+```
+Output:
+```
 
-a) ICA Demo 1: Transactions
+```
+Return Data:
 
-b) ICA Demo 2: Controlling Transactions
+---
+#### ICA Demo 2: T-SQL programming with Parameters
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### TSQL Module 17: Implementing Error Handling
+
+#### ICA Demo 1: Implementing T-SQL Error Handling
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 2: Implementing Structured Exception Handling
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+### TSQL Module 18: Implementing Transactions
+
+#### ICA Demo 1: Transactions
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
+#### ICA Demo 2: Controlling Transactions
+---
+Query:
+```sql
+
+```
+Output:
+```
+
+```
+Return Data:
+
+---
