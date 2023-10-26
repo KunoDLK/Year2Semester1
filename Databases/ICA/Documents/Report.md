@@ -414,40 +414,105 @@ Return Data:
 ---
 Query:
 ```sql
-
+SELECT p.full_name ,p.gender ,p.height ,p.weight
+FROM dbo.person as p
+order by weight desc
 ```
 Output:
 ```
+(128854 rows affected)
 
+Completion time: 2023-10-26T10:28:33.0633471+01:00
 ```
 Return Data:
+| full_name                    | gender | height | weight |
+|------------------------------|--------|--------|--------|
+| Ricardo Blas, Jr.            | M      | 183    | 214    |
+| Aytami Ruano Vega            | M      | 200    | 198    |
+| Marek Galiski                | M      | 200    | 190    |
+| Christopher J. \"Chris\"\" Taylor\" | M      | 196    | 182    |
+| Valentyn Rusliakov           | M      | 187    | 180    |
+| ...                          | ...    | ...    | ...    |
 
 ---
 #### Demo C2: How to Filter Data with Predicates
 ---
 Query:
 ```sql
-
+SELECT p.full_name, p.gender, p.height, p.weight
+FROM dbo.person AS p
+WHERE p.gender = 'M' AND p.height > 180 AND p.weight < 80;
 ```
 Output:
 ```
+(10515 rows affected)
 
+Completion time: 2023-10-26T10:25:47.4424267+01:00
 ```
 Return Data:
+| full_name             | gender | height | weight |
+|-----------------------|--------|--------|--------|
+| Per Knut Aaland       | M      | 188    | 75     |
+| John Aalberg          | M      | 183    | 72     |
+| Jorma Ilmari Aalto    | M      | 182    | 77     |
+| Pepijn Aardewijn      | M      | 189    | 72     |
+| Mika Lauri Aarnikka   | M      | 187    | 76     |
+| ...                   | ...    | ...    | ...    |
 
 ---
 #### Demo C3: How to Filter Data with TOP and OFFSET-FETCH
 ---
 Query:
 ```sql
-
+SELECT TOP(10) p.full_name, p.gender, p.height, p.weight
+FROM dbo.person AS p
+ORDER BY p.full_name;
+```
+```sql
+SELECT p.full_name, p.gender, p.height, p.weight
+FROM dbo.person AS p
+ORDER BY p.full_name
+OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
 ```
 Output:
 ```
+(10 rows affected)
 
+Completion time: 2023-10-26T10:32:41.8330498+01:00
+```
+```
+(10 rows affected)
+
+Completion time: 2023-10-26T10:31:44.3769641+01:00
 ```
 Return Data:
+| full_name                                 | gender | height | weight |
+|-------------------------------------------|--------|--------|--------|
+| A Dijiang                                 | M      | 180    | 80     |
+| A Lamusi                                  | M      | 170    | 60     |
+| A. Aanantha Sambu Mayavo                  | M      | 0      | 0      |
+| A. J. Tyronne Benildus \"Benny\"\" Fernando\" | M      | 179    | 70     |
+| A. Joshua \"Josh\"\" West\"                | M      | 207    | 105    |
+| A. W. Nancy \"Nan\"\" Rae\"                | F      | 156    | 53     |
+| Aa Bela Joaquim                           | F      | 0      | 0      |
+| Aadam Ismaeel Khamis                      | M      | 172    | 67     |
+| Aadjijatmiko Finarsih H.                  | F      | 0      | 0      |
+| Aadolf Fredrik Svanstrm                   | M      | 179    | 70     |
+| ...                                       | ...    | ...    | ...    |
 
+| full_name                  | gender | height | weight |
+|----------------------------|--------|--------|--------|
+| Aafke Hament               | F      | 181    | 64     |
+| Aage Albert Leidersdorff   | M      | 168    | 0      |
+| Aage Avaldorff Meyer       | M      | 0      | 0      |
+| Aage Berntsen              | M      | 0      | 0      |
+| Aage Birch                 | M      | 172    | 70     |
+| Aage Brge Poulsen          | M      | 185    | 68     |
+| Aage Carl Christian Lassen | M      | 181    | 62     |
+| Aage Emil Brix             | M      | 0      | 0      |
+| Aage Emil Kirkegaard       | M      | 0      | 0      |
+| Aage Ernst Larsen          | M      | 0      | 0      |
+| ...                        | ...    | ...    | ...    |
 ---
 #### Demo C4: How to work with Unknown Values
 ---
@@ -792,7 +857,7 @@ Output:
 Return Data:
 
 ---
-#### ICA TSQL Demo 2 - Windows Ranking (or Windows Rank with partition
+#### ICA TSQL Demo 2 - Windows Ranking (or Windows Rank with partition)
 ---
 Query:
 ```sql
