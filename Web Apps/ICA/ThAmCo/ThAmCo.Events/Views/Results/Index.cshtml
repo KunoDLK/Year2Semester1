@@ -1,3 +1,30 @@
+@model IEnumerable<ThAmCo.Events.Models.MenuModel>
+
 <div class="text-left">
     <h1 class="display-4">Results</h1>
 </div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodItemId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MenuId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FoodItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MenuId)
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -8,6 +9,10 @@ namespace ThAmCo.Events.Controllers
         // GET: ResultsController
         public ActionResult Index()
         {
+          
+
+            //HttpClient client = new HttpClient();
+            
             return View();
         }
 
@@ -41,7 +46,8 @@ namespace ThAmCo.Events.Controllers
         // GET: ResultsController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            MenuModel returnModel = new MenuModel();
+            return View(returnModel);
         }
 
         // POST: ResultsController/Edit/5
