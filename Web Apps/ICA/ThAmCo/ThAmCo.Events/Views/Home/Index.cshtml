@@ -1,13 +1,24 @@
-﻿@{
+﻿@using System
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>The time is @DateTime.Now.ToString("HH:mm") </p>
 </div>
 
-<form action="/results" method="GET">
-    <input type="text" name="order_reference" placeholder="Enter Order Reference" />
-    <input type="submit" value="Submit" />
-</form>
+<div>
+    <h3>Order Viewer</h3>
+    <form action="/Orders" method="GET">
+        <input type="text"/>
+        <input type="submit" />
+    </form>
+</div>
+
+<div>
+    <h3>Food Items</h3>
+    <form action="/FoodItems" method="GET">
+        <input type="submit" />
+    </form>
+</div>
