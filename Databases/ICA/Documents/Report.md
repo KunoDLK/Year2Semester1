@@ -574,7 +574,8 @@ Return Data:
 ---
 Query:
 ```sql
-
+INSERT INTO dbo.event (sport_id, event_name) 
+VALUES ((SELECT id FROM dbo.sport WHERE sport_name = 'Military Ski Patrol'), 'Mens Induvidual Military'
 ```
 Output:
 ```

@@ -13,30 +13,21 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> Delete(int foodItemId)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                var response = await client.DeleteAsync($"https://localhost:7173/api/FoodItems/{foodItemId}");
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception("Failed to delete");
-                }
-            }
+            Data.FoodItemApiController.DeleteItem(foodItemId);
+
             return await GetDataView();
         }
 
         private async Task<IActionResult> GetDataView()
         {
-            List<FoodItem> items = new List<FoodItem>();
-            using (HttpClient client = new HttpClient())
-            {
-                var response = await client.GetAsync("https://localhost:7173/api/FoodItems");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    items = JsonConvert.DeserializeObject<List<FoodItem>>(content);
-                }
-            }
-            return View("~/Views/FoodItems/Index.cshtml", items);
+            List<FoodItem> foodItems = await Data.FoodItemApiController.GetAllItems();
+
+            return View("~/Views/FoodItems/Index.cshtml", foodItems);
+        }
+
+        public async Task<IActionResult> Edit(int foodItemId)
+        {
+            return View();
         }
     }
 }

@@ -9,6 +9,7 @@ namespace ThAmCo.Catering.DatabaseContexts
     public class CateringDbContext : DbContext
     {
         public DbSet<FoodItem> FoodItems { get; set; }
+        
         public DbSet<Menu> Menus { get; set; }
 
         public DbSet<MenuFoodItems> MenusFoodItems { get; set; }

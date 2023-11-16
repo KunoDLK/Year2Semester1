@@ -1,0 +1,33 @@
+•	Web Api Services (ThAmCo.Catering) to:
+•	Create, edit, delete and list food items - see the ERD above for details;
+•	Create, edit, delete and list the details of food Menus - see the ERD above for details; 
+•	Add and remove a food item from a menu - see the ERD above for details;
+•	Book, edit and cancel Food for an Event - see the ERD above for details.  The service should return the FoodBookingId as confirmation of the booking; 
+
+•	Via the MVC web app, the user should be able to:
+👍	Create, list and edit guests;
+•	Create a new Event, specifying as a minimum its title, date and EventType;
+•	Edit an Event (except its date and type);
+•	Book a Guest onto an Event;
+•	List Guests (including a total count) for an Event and register their attendance;
+•	Display the details of an individual Guest, including information about the Events with which they are associated and their attendance;
+SHOULD Functional Requirements
+Via the MVC web app, the user should be able to:
+•	Cancel the booking of a guest from an upcoming Event;
+•	Reserve an appropriate, available Venue for an Event via the ThAmCo.Venues web service, freeing any previously associated Venue;
+•	Display a list of Events that includes summary information about the Guests and Venue within it;
+•	Create, list and edit Staff;
+•	Adjust the staffing of an Event, adding available staff or removing currently assigned staff;
+•	See appropriate warnings within the event list and staffing views when there is not a first aider assigned to an Event;
+•	Display the details of a Staff member, including information about upcoming Events at which they are assigned to work;
+•	Cancel (soft delete) an Event, freeing any associated Venue and Staff;
+WOULD Functional Requirements
+Via the MVC web app, the user should be able to:
+•	Display the details for an Event, which must include details of the Venue, Staff and Guests – this should be more detailed that the summary information found in the Event list;
+•	Permanently remove personal data by anonymising their Guest entity;
+•	Display a detailed list of available Venues, filtered by EventType and date range, and then create a new Event by picking a result;
+•	See appropriate warnings within the event list and staffing views when there is fewer than one member of staff per 10 guests assigned to an Event.
+User access control should restrict the following operations:
+•	Can create and edit staff details (Permitted Users: Managers);
+•	Adjust the staffing of an event (Permitted Users: Team Leaders or Managers);
+•	Permanently delete (Permitted Users: Team Leaders or Managers).
