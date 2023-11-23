@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ThAmCo.Catering.Data.FoodItem>
+﻿@model IEnumerable<ThAmCo.Events.Data.FoodItem>
 
 @{
     ViewData["Title"] = "FoodItems";
@@ -13,23 +13,17 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FoodItemId)
+                @Html.DisplayNameFor(model => model.Description):
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.UnitPrice):
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitPrice)
-            </th>
-            <th></th>
+            <th>Action:</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FoodItemId)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>

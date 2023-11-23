@@ -9,7 +9,7 @@ namespace ThAmCo.Catering.DatabaseContexts
     public class CateringDbContext : DbContext
     {
         public DbSet<FoodItem> FoodItems { get; set; }
-        
+
         public DbSet<Menu> Menus { get; set; }
 
         public DbSet<MenuFoodItems> MenusFoodItems { get; set; }
@@ -50,6 +50,8 @@ namespace ThAmCo.Catering.DatabaseContexts
                   .Property(p => p.MenuName)
                   .HasMaxLength(50);
 
+
+            modelBuilder.Entity<MenuFoodItems>().HasKey(nameof(MenuFoodItems.FoodItemId), nameof(MenuFoodItems.MenuId));
 
             modelBuilder.Entity<FoodItem>().HasData(
                   // Starters

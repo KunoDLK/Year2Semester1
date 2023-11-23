@@ -6,26 +6,23 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>The time is @DateTime.Now.ToString("HH:mm") </p>
-</div>
 
-<div>
-    <h3>Order Viewer:</h3>
-    <form action="/Orders" method="GET">
-        <input type="text"/>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+    <a asp-area="" asp-controller="Home" asp-action="events" role="button" class="btn btn-primary btn-lg btn-block" style="background-color: transparent; border-style: solid;">
+        <h1>
+            Events
+        </h1>
+    </a>
+    <a asp-area="" asp-controller="Home" asp-action="venues" role="button" class="btn btn-primary btn-lg btn-block" style="background-color: transparent; border-style: solid;">
+        <h1>
+            Venues
+        </h1>
+    </a>
 
-<div>
-    <h3>Food Items:</h3>
-    <form action="/FoodItems" method="GET">
-        <button type="submit">View List</button>
-    </form>
-</div>
 
-<div>
-    <h3>Guests:</h3>
-    <form action="/Guests" method="GET">
-        <button type="submit">View List</button>
-    </form>
+    <a asp-area="" asp-controller="Home" asp-action="catering" role="button" class="btn btn-primary btn-lg btn-block" style="background-color: transparent; border-style: solid;">
+        <h1>
+            Catering
+        </h1>
+    </a>
+
 </div>

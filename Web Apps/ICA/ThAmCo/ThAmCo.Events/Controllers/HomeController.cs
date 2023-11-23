@@ -23,6 +23,20 @@ namespace ThAmCo.Events.Controllers
             return View();
         }
 
+        public IActionResult Venues()
+        {
+            return View();
+        }
+
+        public IActionResult Events()
+        {
+            return View();
+        }
+        public IActionResult Catering()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

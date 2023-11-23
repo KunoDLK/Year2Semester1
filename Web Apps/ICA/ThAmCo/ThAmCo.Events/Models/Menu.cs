@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Catering.Data
+namespace ThAmCo.Events.Data
 {
       public class Menu
       {
@@ -11,6 +11,5 @@ namespace ThAmCo.Catering.Data
 
             [Required, MaxLength(50)]
             public string MenuName { get; set; }
-
       }
 }

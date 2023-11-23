@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Catering.Data
+namespace ThAmCo.Events.Data
 {
       public class FoodItem
       {

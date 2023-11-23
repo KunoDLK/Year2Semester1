@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ThAmCo.Catering.Data;
+using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -8,26 +8,45 @@ namespace ThAmCo.Events.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            return await GetDataView();
+            List<FoodItem> foodItems = await API.FoodItemController.Get();
+
+            return View("index", foodItems);
         }
 
         public async Task<IActionResult> Delete(int foodItemId)
         {
-            Data.FoodItemApiController.DeleteItem(foodItemId);
+            await API.FoodItemController.Delete(foodItemId);
 
-            return await GetDataView();
-        }
-
-        private async Task<IActionResult> GetDataView()
-        {
-            List<FoodItem> foodItems = await Data.FoodItemApiController.GetAllItems();
-
-            return View("~/Views/FoodItems/Index.cshtml", foodItems);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int foodItemId)
         {
-            return View();
+            FoodItem item = await API.FoodItemController.Get(foodItemId);
+
+            return View(item);
+        }
+
+        public async Task<IActionResult> SubmitItem(FoodItem foodItem)
+        {
+            if (foodItem.Description != string.Empty && foodItem.Description != null)
+            {
+                if (foodItem.FoodItemId == 0)
+                {
+                   await API.FoodItemController.Post(foodItem);
+                }
+                else
+                {
+                    await API.FoodItemController.Put(foodItem);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            return View("Edit");
         }
     }
 }
