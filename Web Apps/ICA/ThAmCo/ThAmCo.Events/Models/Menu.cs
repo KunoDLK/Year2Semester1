@@ -2,14 +2,14 @@
 
 namespace ThAmCo.Events.Data
 {
-      public class Menu
-      {
-            public Menu() { }
+    public class Menu
+    {
+        public Menu() { }
 
-            [Key]
-            public int MenuId { get; set; }
+        public int MenuId { get; set; }
 
-            [Required, MaxLength(50)]
-            public string MenuName { get; set; }
-      }
-}
+        public string MenuName { get; set; }
+
+        public List<int> foodItems { get; set; }
+    }
+}   
