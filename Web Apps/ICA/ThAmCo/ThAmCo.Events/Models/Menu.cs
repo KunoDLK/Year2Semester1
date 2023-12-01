@@ -10,6 +10,5 @@ namespace ThAmCo.Events.Data
 
         public string MenuName { get; set; }
 
-        public List<int> foodItems { get; set; }
     }
 }   

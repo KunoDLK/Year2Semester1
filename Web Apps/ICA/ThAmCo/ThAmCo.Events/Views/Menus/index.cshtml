@@ -4,38 +4,34 @@
     ViewData["Title"] = "index";
 }
 
-<h1>index</h1>
+<h1>Menus</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Edit">Add New Menu</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MenuId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MenuName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
+  
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MenuId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MenuName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr id="@($"Menu{item.MenuId}")">
+                <td>
+                    @Html.DisplayFor(modelItem => item.MenuId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MenuName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { menuId = item.MenuId }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/MenuLoader.js"></script>
+}

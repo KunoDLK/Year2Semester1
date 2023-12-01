@@ -9,16 +9,26 @@ namespace ThAmCo.Events.Controllers
         {
             var returnList = await API.MenuController.Get();
 
-            return View(returnList);
+            return View(returnList);    
         }
 
         public async Task<IActionResult> Create()
         {
-            List<FoodItem> items = await API.FoodItemController.Get();
+            return View("Edit", null);
+        }
 
-            ViewData["FoodItems"] = items.Select(item => new Dictionary<int, string> { { item.FoodItemId, item.Description } });
+        public async Task<IActionResult> Edit(int menuId)
+        {
+            Menu items = await API.MenuController.Get(menuId);
 
-            return View();
+            return View("Edit", items);
+        }
+
+        public async Task<IActionResult> Submit(Menu menu)
+        {
+            //TODO : DO
+
+            return RedirectToAction("Index");
         }
     }
 }
