@@ -44,16 +44,16 @@ namespace ThAmCo.Catering.Controllers
 
         // PUT: api/MenuFoodItems/5
         [HttpPost]
-        public async Task<IActionResult> PutMenuFoodItems(MenuFoodItems menuFoodItem)
+        public async Task<IActionResult> PostMenuFoodItems(MenuFoodItems menuFoodItem)
         {
-            if (_context.MenusFoodItems.FirstOrDefault(x => x.MenuId == menuFoodItem.MenuId && x.FoodItemId == menuFoodItem.FoodItemId) == null
+            if (_context.MenusFoodItems.FirstOrDefault(x => x.MenuId == menuFoodItem.MenuId && x.FoodItemId == menuFoodItem.FoodItemId) != null
                 || _context.FoodItems.Find(menuFoodItem.FoodItemId) == null
                 || _context.Menus.Find(menuFoodItem.MenuId) == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(menuFoodItem).State = EntityState.Modified;
+            _context.MenusFoodItems.Add(menuFoodItem);
 
             await _context.SaveChangesAsync();
 
