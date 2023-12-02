@@ -30,9 +30,9 @@ namespace ThAmCo.Catering.Controllers
 
         // GET: api/MenuFoodItems/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<MenuFoodItems>> GetMenuFoodItems(int id)
+        public async Task<ActionResult<List<MenuFoodItems>>> GetMenuFoodItems(int id)
         {
-            var menuFoodItems = await _context.MenusFoodItems.FirstOrDefaultAsync(x => x.MenuId == id);
+            var menuFoodItems = _context.MenusFoodItems.Where(x => x.MenuId == id).ToList();
 
             if (menuFoodItems == null)
             {

@@ -1,0 +1,12 @@
+﻿@model int
+@{
+    ViewData["Title"] = "DeleteWithConfimation";
+}
+
+<h1>Are you sure?</h1>
+
+<p>
+    @Html.ActionLink("No", "Index") |
+    @Html.ActionLink("Delete", "Delete", new { MenuId = Model })
+</p>
+

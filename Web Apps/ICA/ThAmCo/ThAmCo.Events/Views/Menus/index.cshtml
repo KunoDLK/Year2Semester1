@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ThAmCo.Events.Data.Menu>
 
 @{
-    ViewData["Title"] = "index";
+    ViewData["Title"] = "Menus";
 }
 
 <h1>Menus</h1>
@@ -9,26 +9,32 @@
 <p>
     <a asp-action="Edit">Add New Menu</a>
 </p>
-<table class="table">
-  
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr id="@($"Menu{item.MenuId}")">
-                <td>
-                    @Html.DisplayFor(modelItem => item.MenuId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MenuName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { menuId = item.MenuId }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+@foreach (var item in Model)
+{
+    <div style="border:dashed;">
+
+        <h2>
+            Menu: "@Html.DisplayFor(modelItem => item.MenuName)"
+        </h2>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { menuId = item.MenuId }) |
+            @Html.ActionLink("Delete", "DeleteWithConfimation", new { menuId = item.MenuId})
+        </p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            <tbody id="@($"MeunItems{item.MenuId}")" data-id="@item.MenuId">
+               
+            </tbody>
+        </table>
+    </div>
+}
 
 
 @section Scripts

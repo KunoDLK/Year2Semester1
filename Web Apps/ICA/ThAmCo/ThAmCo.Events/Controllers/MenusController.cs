@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging.Signing;
 using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Controllers
@@ -26,9 +27,29 @@ namespace ThAmCo.Events.Controllers
 
         public async Task<IActionResult> Submit(Menu menu)
         {
-            //TODO : DO
+            if (menu.MenuId == 0)
+            {
+            await API.MenuController.Post(menu);
+            }
+            else
+            {
+                await API.MenuController.Put(menu);
+            }
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> DeleteWithConfimation(int menuId)
+        {
+            return View(menuId);
+        }
+
+        public async Task<IActionResult> Delete(int menuId)
+        {
+            await API.MenuController.Delete(menuId);
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
