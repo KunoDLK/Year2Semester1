@@ -38,7 +38,6 @@ function FetchFoodItems() {
 		crossDomain: true,
 		success: function (result) {
 
-			console.log(result)
 			SetFoodItems(result)
 		},
 		error: function (error) {
@@ -54,8 +53,6 @@ function SetFoodItems(fooditems) {
 		$('#FoodItem' + foodItem.foodItemId).each(function () {
 
 			$(this).html("<td>" + foodItem.description + "</td><td>" + foodItem.unitPrice + "</td>");
-
-			console.log("Element hit")
 		})
 	})
 }
