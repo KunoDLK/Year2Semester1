@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Ajax Demo";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="DirectorId" class="control-label">Director:</label>
+                <select id="DirectorId" class="form-control"></select>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="MovieId" class="control-label">Movies:</label>
+                <select id="MovieId" class="form-control" disabled="disabled"></select>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript" src="~/js/ajaxdemo.js"></script>
+}
