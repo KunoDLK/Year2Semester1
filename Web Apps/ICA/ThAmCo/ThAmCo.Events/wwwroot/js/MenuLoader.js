@@ -50,7 +50,7 @@ function FetchFoodItems() {
 
 function SetFoodItems(fooditems) {
 	fooditems.forEach(function (foodItem) {
-		$('#FoodItem' + foodItem.foodItemId).each(function () {
+		$('[id=FoodItem' + foodItem.foodItemId + ']').each(function () {
 
 			$(this).html("<td>" + foodItem.description + "</td><td>" + foodItem.unitPrice + "</td>");
 		})
