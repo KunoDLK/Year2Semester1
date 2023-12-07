@@ -4,49 +4,51 @@ using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class FoodItemsController : Controller
-    {
-        public async Task<IActionResult> Index()
-        {
-            List<FoodItem> foodItems = await API.FoodItemController.Get();
-
-            return View("index", foodItems);
-        }
-
-        public async Task<IActionResult> Delete(int foodItemId)
-        {
-            await API.FoodItemController.Delete(foodItemId);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Edit(int foodItemId)
-        {
-            FoodItem item = await API.FoodItemController.Get(foodItemId);
-
-            return View(item);
-        }
-
-        public async Task<IActionResult> SubmitItem(FoodItem foodItem)
-        {
-            if (foodItem.Description != string.Empty && foodItem.Description != null)
+      public class FoodItemsController : Controller
+      {
+            public async Task<IActionResult> Index()
             {
-                if (foodItem.FoodItemId == 0)
-                {
-                   await API.FoodItemController.Post(foodItem);
-                }
-                else
-                {
-                    await API.FoodItemController.Put(foodItem);
-                }
+                  List<FoodItem> foodItems = await API.FoodItemController.Get();
+
+                  return View("index", foodItems);
             }
 
-            return RedirectToAction(nameof(Index));
-        }
+            public async Task<IActionResult> Delete(int foodItemId)
+            {
+                  await API.FoodItemController.Delete(foodItemId);
 
-        public async Task<IActionResult> Create()
-        {
-            return View("Edit");
-        }
-    }
+                  API.MenuFoodItemController.DeleteFoodItem(foodItemId);
+
+                  return RedirectToAction(nameof(Index));
+            }
+
+            public async Task<IActionResult> Edit(int foodItemId)
+            {
+                  FoodItem item = await API.FoodItemController.Get(foodItemId);
+
+                  return View(item);
+            }
+
+            public async Task<IActionResult> SubmitItem(FoodItem foodItem)
+            {
+                  if (foodItem.Description != string.Empty && foodItem.Description != null)
+                  {
+                        if (foodItem.FoodItemId == 0)
+                        {
+                              await API.FoodItemController.Post(foodItem);
+                        }
+                        else
+                        {
+                              await API.FoodItemController.Put(foodItem);
+                        }
+                  }
+
+                  return RedirectToAction(nameof(Index));
+            }
+
+            public async Task<IActionResult> Create()
+            {
+                  return View("Edit");
+            }
+      }
 }

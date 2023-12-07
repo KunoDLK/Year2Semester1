@@ -1,5 +1,8 @@
 $(document).ready(function () {
+	LoadMenu()
+});
 
+function LoadMenu() {
 	$('[id^="MeunItems"]').each(function () {
 
 		var menuId = parseInt($(this).data("id"));
@@ -7,9 +10,8 @@ $(document).ready(function () {
 		GetMenuItemIds(menuId)
 	});
 
-FetchFoodItems()
-	
-});
+	FetchFoodItems()
+}
 
 function GetMenuItemIds(menuId) {
 	$.ajax({
@@ -19,7 +21,7 @@ function GetMenuItemIds(menuId) {
 		async: false,
 		success: function (results) {
 			results.forEach(function (result) {
-				$('#MeunItems' + result.menuId).append('<tr id="FoodItem' + result.foodItemId + '" data-id="' + result.foodItemId + '"><td>' + result.foodItemId + '</td></tr>')
+				$('#MeunItems' + result.menuId).append('<tr id="FoodItem' + result.foodItemId + '" data-id="' + result.foodItemId + ' style="bold=true" "><td> --- Deleted Item --- </td><td> --- Deleted Item --- </td></tr>')
 			})
 		},
 

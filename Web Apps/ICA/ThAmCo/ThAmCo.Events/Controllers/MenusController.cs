@@ -4,52 +4,58 @@ using ThAmCo.Events.Data;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class MenusController : Controller
-    {
-        public async Task<IActionResult> Index()
-        {
-            var returnList = await API.MenuController.Get();
+      public class MenusController : Controller
+      {
+            private string DefaultNewName => "Untitled Menu";
 
-            return View(returnList);    
-        }
+            private API.APIController<Menu> APIController { get; set; }
 
-        public async Task<IActionResult> Create()
-        {
-            return View("Edit", null);
-        }
-
-        public async Task<IActionResult> Edit(int menuId)
-        {
-            Menu items = await API.MenuController.Get(menuId);
-
-            return View("Edit", items);
-        }
-
-        public async Task<IActionResult> Submit(Menu menu)
-        {
-            if (menu.MenuId == 0)
+            public MenusController()
             {
-            await API.MenuController.Post(menu);
-            }
-            else
-            {
-                await API.MenuController.Put(menu);
+                  APIController = new API.APIController<Menu>("Menus");
             }
 
-            return RedirectToAction("Index");
-        }
+            public async Task<IActionResult> Index()
+            {
+                  var returnList = await APIController.Get();
 
-        public async Task<IActionResult> DeleteWithConfimation(int menuId)
-        {
-            return View(menuId);
-        }
+                  returnList = returnList.OrderByDescending(x => x.MenuName.Equals(DefaultNewName)).OrderByDescending(x => x.MenuId).ToList();
 
-        public async Task<IActionResult> Delete(int menuId)
-        {
-            await API.MenuController.Delete(menuId);
+                  return View(returnList);
+            }
 
-            return RedirectToAction("Index");
-        }
+            public async Task<IActionResult> Create()
+            {
+                  await APIController.Post(new Menu() { MenuName = DefaultNewName });
 
-    }
+                  return RedirectToAction("Index");
+            }
+
+            public async Task<IActionResult> Edit(int menuId)
+            {
+                  Menu items = await APIController.Get(menuId);
+
+                  return View("Edit", items);
+            }
+
+            public async Task<IActionResult> Submit(Menu menu)
+            {
+                  await APIController.Put(menu);
+
+                  return RedirectToAction("Index");
+            }
+
+            public async Task<IActionResult> DeleteWithConfimation(int menuId)
+            {
+                  return View(menuId);
+            }
+
+            public async Task<IActionResult> Delete(int menuId)
+            {
+                  await APIController.Delete(menuId);
+
+                  return RedirectToAction("Index");
+            }
+
+      }
 }

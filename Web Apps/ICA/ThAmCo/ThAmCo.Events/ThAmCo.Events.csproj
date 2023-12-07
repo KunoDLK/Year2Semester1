@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Views\VenueAvalibility\" />
+    <Folder Include="Views\Venue\" />
   </ItemGroup>
 
 </Project>
