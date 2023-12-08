@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ThAmCo.Venues.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
-      public class EventTypeController : Controller
+    public class EventTypeController : Controller
       {
             // GET: EventTypeController_
             public ActionResult Index()

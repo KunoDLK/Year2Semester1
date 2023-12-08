@@ -1,21 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Events.Data
+namespace ThAmCo.Events.Models
 {
-      public class FoodBooking
-      {
-            public FoodBooking() { }
+    public class FoodBooking
+    {
+        public FoodBooking() { }
 
-            [Key]
-            public int Id { get; set; }
+        [Key]
+        public int Id { get; set; }
 
-            [Required]
-            public int ClientId { get; set; }
+        [Required]
+        public int ClientId { get; set; }
 
-            [Required]
-            public int NumberOfGuests { get; set; }
+        [Required]
+        public int NumberOfGuests { get; set; }
 
-            [Required]
-            public int MenuId { get; set; }
-      }
+        [Required]
+        public int MenuId { get; set; }
+    }
 }

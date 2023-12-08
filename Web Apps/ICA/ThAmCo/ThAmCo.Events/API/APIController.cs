@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using ThAmCo.Venues.Data;
+using ThAmCo.Events.Models;
 
-namespace ThAmCo.Events.API
+namespace ThAmCo.Events.API   
 {
-      public class APIController<T>
+      public class APIController<T> : BaseAPI
       {
             private string URLExtension { get; set; }
 
-            public APIController(string urlExtension)
+            public APIController(APIType type, string urlExtension) : base(type)
             {
                   URLExtension = urlExtension;
             }
@@ -18,7 +18,7 @@ namespace ThAmCo.Events.API
                   List<T> items = new List<T>();
                   using (HttpClient client = new HttpClient())
                   {
-                        var response = await client.GetAsync($"{BaseAPI.BaseCateringURL}/{URLExtension}");
+                        var response = await client.GetAsync($"{BaseURL}/{URLExtension}");
                         if (response.IsSuccessStatusCode)
                         {
                               var content = await response.Content.ReadAsStringAsync();
@@ -35,7 +35,7 @@ namespace ThAmCo.Events.API
 
                   using (HttpClient client = new HttpClient())
                   {
-                        var response = await client.GetAsync($"{BaseAPI.BaseCateringURL}/{URLExtension}/{id}");
+                        var response = await client.GetAsync($"{BaseURL}/{URLExtension}/{id}");
                         if (response.IsSuccessStatusCode)
                         {
                               var content = await response.Content.ReadAsStringAsync();
@@ -50,7 +50,7 @@ namespace ThAmCo.Events.API
             {
                   using (HttpClient client = new HttpClient())
                   {
-                        var response = await client.DeleteAsync($"{BaseAPI.BaseCateringURL}/{URLExtension}/{id}");
+                        var response = await client.DeleteAsync($"{BaseURL}/{URLExtension}/{id}");
 
                         if (!response.IsSuccessStatusCode)
                         {
@@ -64,7 +64,7 @@ namespace ThAmCo.Events.API
                   using (HttpClient client = new HttpClient())
                   {
                         var content = new StringContent(JsonConvert.SerializeObject(EventType), Encoding.UTF8, "application/json");
-                        var response = await client.PutAsync($"{BaseAPI.BaseCateringURL}/{URLExtension}", content);
+                        var response = await client.PutAsync($"{BaseURL}/{URLExtension}", content);
                   }
             }
 
@@ -73,7 +73,7 @@ namespace ThAmCo.Events.API
                   using (HttpClient client = new HttpClient())
                   {
                         var content = new StringContent(JsonConvert.SerializeObject(eventType), Encoding.UTF8, "application/json");
-                        var response = await client.PostAsync($"{BaseAPI.BaseCateringURL}/{URLExtension}", content);
+                        var response = await client.PostAsync($"{BaseURL}/{URLExtension}", content);
                   }
             }
       }

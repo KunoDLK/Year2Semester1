@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ThAmCo.Events.Data.Guest>
+
+@{
+    ViewData["Title"] = "All Guests";
+}
+
+
+<h1>All Guests</h1>
+<a asp-action="Create">
+    Create New
+</a>
+<table class="table">   
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Phone Number
+            </th>
+            <th>
+                Banned
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id="Guest{@item.Id}">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactPhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Banned)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a id="Delete" data-item="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

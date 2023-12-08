@@ -5,32 +5,32 @@ using ThAmCo.Events.DatabaseContexts;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class GuestsController : Controller
+    public class GuestController : Controller
     {
         public EventDbContext DatabaseContext { get; set; }
 
-        public GuestsController(EventDbContext context)
+        public GuestController(EventDbContext context)
         {
             DatabaseContext = context;
         }
 
-        // GET: GuestsController1
+        // GET: GuestsController
         public ActionResult Index()
         {
-            List<Data.Guest> returnData;
+            List<Guest> returnData = new List<Guest>();
 
             returnData = DatabaseContext.Guests.ToList();
 
             return View(returnData);
         }
 
-        // GET: GuestsController1/Create
+        // GET: GuestsController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: GuestsController1/Create
+        // POST: GuestsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Guest guest)
@@ -47,7 +47,7 @@ namespace ThAmCo.Events.Controllers
             }
         }
 
-        // GET: GuestsController1/Edit/5
+        // GET: GuestsController/Edit/5
         public ActionResult Edit(int id)
         {
             Guest editGuest;
@@ -57,7 +57,7 @@ namespace ThAmCo.Events.Controllers
             return View(editGuest);
         }
 
-        // POST: GuestsController1/Edit/5
+        // POST: GuestsController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Guest updatedGuest)
@@ -78,7 +78,7 @@ namespace ThAmCo.Events.Controllers
             }
         }
 
-        // GET: GuestsController1/Delete/5
+        // GET: GuestsController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();

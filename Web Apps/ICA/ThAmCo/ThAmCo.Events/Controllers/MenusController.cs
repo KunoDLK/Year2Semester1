@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging.Signing;
-using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
-      public class MenusController : Controller
+    public class MenusController : Controller
       {
             private string DefaultNewName => "Untitled Menu";
 
@@ -12,7 +12,7 @@ namespace ThAmCo.Events.Controllers
 
             public MenusController()
             {
-                  APIController = new API.APIController<Menu>("Menus");
+                  APIController = new API.APIController<Menu>(API.BaseAPI.APIType.Catering, "Menus");
             }
 
             public async Task<IActionResult> Index()

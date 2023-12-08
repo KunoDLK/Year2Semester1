@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Events.Data
+namespace ThAmCo.Events.Models
 {
     public class Menu
     {
@@ -11,4 +11,4 @@ namespace ThAmCo.Events.Data
         public string MenuName { get; set; }
 
     }
-}   
+}

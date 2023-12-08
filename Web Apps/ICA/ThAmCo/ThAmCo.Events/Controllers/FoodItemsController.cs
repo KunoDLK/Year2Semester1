@@ -1,30 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using ThAmCo.Events.Data;
+using ThAmCo.Events.API;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
-      public class FoodItemsController : Controller
+    public class FoodItemsController : Controller
       {
+            public APIController<FoodItem> APIController { get; set; }
+
+            public FoodItemsController()
+            {
+                  APIController = new APIController<FoodItem>(BaseAPI.APIType.Catering, "FoodItem");
+            }
+
             public async Task<IActionResult> Index()
             {
-                  List<FoodItem> foodItems = await API.FoodItemController.Get();
+                  List<FoodItem> foodItems = await APIController.Get();
 
                   return View("index", foodItems);
             }
 
             public async Task<IActionResult> Delete(int foodItemId)
             {
-                  await API.FoodItemController.Delete(foodItemId);
+                  await APIController.Delete(foodItemId);
 
-                  API.MenuFoodItemController.DeleteFoodItem(foodItemId);
+                  new MenuFoodItemController().DeleteFoodItem(foodItemId);
 
                   return RedirectToAction(nameof(Index));
             }
 
             public async Task<IActionResult> Edit(int foodItemId)
             {
-                  FoodItem item = await API.FoodItemController.Get(foodItemId);
+                  FoodItem item = await APIController.Get(foodItemId);
 
                   return View(item);
             }
@@ -35,11 +43,11 @@ namespace ThAmCo.Events.Controllers
                   {
                         if (foodItem.FoodItemId == 0)
                         {
-                              await API.FoodItemController.Post(foodItem);
+                              await APIController.Post(foodItem);
                         }
                         else
                         {
-                              await API.FoodItemController.Put(foodItem);
+                              await APIController.Put(foodItem);
                         }
                   }
 

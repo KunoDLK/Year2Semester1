@@ -12,11 +12,11 @@ namespace ThAmCo.Catering.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodItemsController : ControllerBase
+    public class FoodItemController : ControllerBase
     {
         private readonly CateringDbContext _context;
 
-        public FoodItemsController(CateringDbContext context)
+        public FoodItemController(CateringDbContext context)
         {
             _context = context;
         }

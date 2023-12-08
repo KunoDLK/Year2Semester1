@@ -21,7 +21,7 @@ function GetMenuItemIds(menuId) {
 		async: false,
 		success: function (results) {
 			results.forEach(function (result) {
-				$('#MeunItems' + result.menuId).append('<tr id="FoodItem' + result.foodItemId + '" data-id="' + result.foodItemId + ' style="bold=true" "><td> --- Deleted Item --- </td><td> --- Deleted Item --- </td></tr>')
+				$('#MeunItems' + result.menuId).append('<tr id="FoodItem' + result.foodItemId + '" data-id="' + result.foodItemId + ' style="bold=true" "><td> --- Removed Item --- </td><td> --- Removed Item --- </td></tr>')
 			})
 		},
 
@@ -35,7 +35,7 @@ function FetchFoodItems() {
 	var returnItems =null
 	
 	$.ajax({
-		url: 'https://localhost:7173/api/FoodItems/',
+		url: 'https://localhost:7173/api/FoodItem/',
 		type: "GET",
 		crossDomain: true,
 		success: function (result) {

@@ -1,12 +1,14 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
-using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.API
 {
-      public static class MenuFoodItemController
+    public class MenuFoodItemController : BaseAPI
       {
-            public async static void DeleteFoodItem(int foodId)
+            public MenuFoodItemController() : base(APIType.Catering) { }
+
+            public async void DeleteFoodItem(int foodId)
             {
                   var items = await Get();
 
@@ -18,13 +20,13 @@ namespace ThAmCo.Events.API
                   }
             }
 
-            public async static Task<List<MenuFoodItems>> Get()
+            public async Task<List<MenuFoodItems>> Get()
             {
 
                   List<MenuFoodItems> items = new List<MenuFoodItems>();
                   using (HttpClient client = new HttpClient())
                   {
-                        var response = await client.GetAsync($"{BaseAPI.BaseCateringURL}/MenuFoodItems");
+                        var response = await client.GetAsync($"{BaseURL}/MenuFoodItems");
                         if (response.IsSuccessStatusCode)
                         {
                               var content = await response.Content.ReadAsStringAsync();
@@ -36,14 +38,14 @@ namespace ThAmCo.Events.API
 
             }
 
-            public static async Task Delete(MenuFoodItems menuFoodItem)
+            public async Task Delete(MenuFoodItems menuFoodItem)
             {
                   using (HttpClient client = new HttpClient())
                   {
                         var content = new StringContent(JsonConvert.SerializeObject(menuFoodItem), Encoding.UTF8, "application/json");
 
                         // add to request
-                        var response = await client.DeleteAsync($"{BaseAPI.BaseCateringURL}/MenuFoodItems/");
+                        var response = await client.DeleteAsync($"{BaseURL}/MenuFoodItems/");
 
                         if (!response.IsSuccessStatusCode)
                         {

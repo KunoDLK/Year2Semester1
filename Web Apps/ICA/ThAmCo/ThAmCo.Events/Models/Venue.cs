@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Venues.Data
+namespace ThAmCo.Events.Models
 {
     public class Venue
     {

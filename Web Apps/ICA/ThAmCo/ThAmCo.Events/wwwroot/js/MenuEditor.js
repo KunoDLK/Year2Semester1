@@ -68,7 +68,7 @@ function SetSelectedFoodItems(menuId) {
 
 function FetchFoodItems() {
 	$.ajax({
-		url: 'https://localhost:7173/api/FoodItems/',
+		url: 'https://localhost:7173/api/FoodItem/',
 		type: "GET",
 		crossDomain: true,
 		async: false,
