@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.DatabaseContexts
 {
@@ -43,6 +44,12 @@ namespace ThAmCo.Events.DatabaseContexts
         {
             base.OnModelCreating(modelBuilder);
         }
+
+        #endregion
+
+        #region Model Creation
+
+        public DbSet<ThAmCo.Events.Models.Venue> Venue { get; set; }
 
         #endregion
 

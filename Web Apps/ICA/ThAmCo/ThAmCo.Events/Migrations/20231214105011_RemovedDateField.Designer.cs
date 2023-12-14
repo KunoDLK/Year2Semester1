@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ThAmCo.Events.DatabaseContexts;
 
@@ -10,9 +11,10 @@ using ThAmCo.Events.DatabaseContexts;
 namespace ThAmCo.Events.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    partial class EventDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214105011_RemovedDateField")]
+    partial class RemovedDateField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.22");
@@ -26,9 +28,8 @@ namespace ThAmCo.Events.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EventTypeId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -124,26 +125,6 @@ namespace ThAmCo.Events.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Staffing");
-                });
-
-            modelBuilder.Entity("ThAmCo.Events.Models.Venue", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasMaxLength(5)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Capacity")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("Venue");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Reservation>
+
+@{
+    ViewData["Title"] = "Reservation";
+}
+
+<h1>Reservation</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference):
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VenueCode):
+            </th>
+            <th>Action:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reference)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VenueCode)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { foodItemId = item.Reference }) |
+                    @Html.ActionLink("Delete", "Delete", new { foodItemId = item.Reference })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Humanizer;
 
 namespace ThAmCo.Events.Data
 {
@@ -10,10 +11,7 @@ namespace ThAmCo.Events.Data
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public DateTime Date { get; set; }
+        public string Name { get; set; } = "";
 
         [Required]
         public DateTime StartTime { get; set; }
@@ -22,7 +20,7 @@ namespace ThAmCo.Events.Data
         public DateTime EndTime { get; set; }
 
         [Required]
-        public int EventTypeId { get; set; }
+        public string EventTypeId { get; set; } = "";
 
     }
 }
