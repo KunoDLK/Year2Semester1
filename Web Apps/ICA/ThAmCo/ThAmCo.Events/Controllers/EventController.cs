@@ -1,19 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ThAmCo.Events.API;
+using ThAmCo.Events.Data;
 using ThAmCo.Events.DatabaseContexts;
+using ThAmCo.Events.Migrations;
 using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
     public class EventController : Controller
     {
-        private APIController<EventType> APIController { get; set; }
+        private APIController<EventType> EventTypeAPI { get; set; }
+
+        private APIController<Guest> GuestAPI { get; set; }
+
+        private APIController<Menu> MenuAPI { get; set; }
+
         private EventDbContext DbContext { get; set; }
 
         public EventController(EventDbContext dbContext)
         {
             DbContext = dbContext;
-            APIController = new APIController<EventType>(BaseAPI.APIType.Venues, "EventTypes");
+            EventTypeAPI = new APIController<EventType>(BaseAPI.APIType.Venues, "eventtypes");
+            GuestAPI = new APIController<Guest>(BaseAPI.APIType.Venues, "guest");
+            MenuAPI = new APIController<Menu>(BaseAPI.APIType.Catering, "menus");
         }
 
         public IActionResult Index()
@@ -80,9 +89,17 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            EventDetails eventDetails = new EventDetails
+            {
+                Event = DbContext.Events.FirstOrDefault(x => x.Id == id),
+                EventTypes = await EventTypeAPI.Get(),
+                Menus = (await MenuAPI.Get()).ToDictionary(menu => menu.MenuId, menu => menu.MenuName)
+            };
+
+
+            return View(eventDetails);
         }
     }
 }

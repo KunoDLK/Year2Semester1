@@ -3,11 +3,19 @@ $(document).ready(function () {
 });
 
 function LoadMenu() {
-	$('[id^="MeunItems"]').each(function () {
 
-		var menuId = parseInt($(this).data("id"));
+	var menuLists = $('[id^="MeunItems"]');
 
-		GetMenuItemIds(menuId)
+	menuLists.each(function () {
+
+		var data = $(this).data("id");
+
+		if (data != undefined) {
+
+			var menuId = parseInt(data);
+
+			GetMenuItemIds(menuId)
+		}
 	});
 
 	FetchFoodItems()
@@ -32,8 +40,8 @@ function GetMenuItemIds(menuId) {
 }
 
 function FetchFoodItems() {
-	var returnItems =null
-	
+	var returnItems = null
+
 	$.ajax({
 		url: 'https://localhost:7173/api/FoodItem/',
 		type: "GET",

@@ -1,17 +1,52 @@
-﻿@*
+﻿@model EventDetails;
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-      <div>
-      Event information
-      </div>
-      <div>
-      Guests
-      </div>
-      <div>
-      Food
-      </div>
-      <div>
-      Staffing
-      </div>
+    <div>
+        Event information
+    </div>
+    <div>
+        Guests
+    </div>
+    <div>
+        <select>
+            <option value="null">-- Select --</option>
+            @if (Model.Menus != null)
+            {
+                @foreach (var menu in Model.Menus)
+                {
+                    <option value="@menu.Key">@menu.Value</option>
+                }
+            }
+        </select>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Price</td>
+                </tr>
+            </thead>
+            @if (Model.Menu != null)
+            {
+                <tbody id="@($"MeunItems{Model.Menu.MenuId}")" data-id="@Model.Menu.MenuId">
+                </tbody>
+            }
+            else
+            {
+                <tbody id="@($"MeunItems")">
+                </tbody>
+            }
+        </table>
+    </div>
+    <div>
+        Staffing
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/MenuLoader.js"></script>
 }
