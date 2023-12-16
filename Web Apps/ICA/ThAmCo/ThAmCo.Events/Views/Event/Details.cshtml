@@ -4,17 +4,29 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    <div>
-        Event information
-    </div>
+    <h1>
+        Event information:
+    </h1>
+    <h2>
+        Name: @Model.Event.Name
+    </h2>
+    <h2>
+        Date: @Model.Event.StartTime.ToString("dd/MM/yyyy")
+    </h2>
+    <h2>
+        Start Time: @Model.Event.StartTime.ToString("hh:mm")
+    </h2>
+    <h2>
+        End Time: @Model.Event.EndTime.ToString("hh:mm")
+    </h2>
     <div>
         Guests
     </div>
     <div>
-        <select>
+        <select id="MenuSelector">
             <option value="null">-- Select --</option>
             @if (Model.Menus != null)
-            {
+            {     
                 @foreach (var menu in Model.Menus)
                 {
                     <option value="@menu.Key">@menu.Value</option>
@@ -31,12 +43,12 @@
             </thead>
             @if (Model.Menu != null)
             {
-                <tbody id="@($"MeunItems{Model.Menu.MenuId}")" data-id="@Model.Menu.MenuId">
+                <tbody id="@($"SelectedMenu{Model.Menu.MenuId}")" data-id="@Model.Menu.MenuId">
                 </tbody>
             }
             else
             {
-                <tbody id="@($"MeunItems")">
+                <tbody id="@($"SelectedMenu")">
                 </tbody>
             }
         </table>
