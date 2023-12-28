@@ -15,6 +15,8 @@ namespace ThAmCo.Events.Controllers
 
         private APIController<Menu> MenuAPI { get; set; }
 
+        private APIController<FoodBooking> FoodBookingAPI { get; set; }
+
         private EventDbContext DbContext { get; set; }
 
         public EventController(EventDbContext dbContext)
@@ -23,11 +25,12 @@ namespace ThAmCo.Events.Controllers
             EventTypeAPI = new APIController<EventType>(BaseAPI.APIType.Venues, "eventtypes");
             GuestAPI = new APIController<Guest>(BaseAPI.APIType.Venues, "guest");
             MenuAPI = new APIController<Menu>(BaseAPI.APIType.Catering, "menus");
+            FoodBookingAPI = new APIController<FoodBooking>(BaseAPI.APIType.Catering, "foodbooking");
         }
 
         public IActionResult Index()
         {
-            List<Data.Event> events = new List<Data.Event>();
+            List<Event> events = new List<Event>();
 
             events = DbContext.Events.ToList();
 
@@ -89,17 +92,46 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
+            if (id == null)
+                return RedirectToAction("Index");
+
             EventDetails eventDetails = new EventDetails
             {
                 Event = DbContext.Events.FirstOrDefault(x => x.Id == id),
                 EventTypes = await EventTypeAPI.Get(),
-                Menus = (await MenuAPI.Get()).ToDictionary(menu => menu.MenuId, menu => menu.MenuName)
+                Menus = (await MenuAPI.Get()).ToDictionary(menu => menu.MenuId, menu => menu.MenuName),
             };
 
+            if (eventDetails.Event.foodBookingID != null)
+            {
+                eventDetails.FoodBooking = await FoodBookingAPI.Get((int)eventDetails.Event.foodBookingID);
+            }
 
-            return View(eventDetails);
+            return View("Details", eventDetails);
+        }
+
+        public async Task<IActionResult> SetMenu(int? menuId, int eventId, int? foodBookingId)
+        {
+            if (menuId == null || eventId == null)
+                return await Details(eventId);
+
+            var foodOrder = new FoodBooking()
+            {
+                MenuId = (int)menuId,
+            };
+
+            if ( foodBookingId == null)
+            {
+                
+            }
+            else
+            {
+            FoodBookingAPI.Get((int)foodBookingId);
+            }
+
+            return RedirectToAction("Details", eventId);
         }
     }
 }

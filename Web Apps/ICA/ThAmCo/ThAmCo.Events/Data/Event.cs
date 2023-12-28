@@ -22,5 +22,7 @@ namespace ThAmCo.Events.Data
         [Required]
         public string EventTypeId { get; set; } = "";
 
+        public int? foodBookingID { get; set; }
+
     }
 }
