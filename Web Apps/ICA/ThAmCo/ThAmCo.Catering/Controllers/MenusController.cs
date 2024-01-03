@@ -39,14 +39,9 @@ namespace ThAmCo.Catering.Controllers
 
         // PUT: api/Menus/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMenu(int id, Menu menu)
+        [HttpPut]
+        public async Task<IActionResult> PutMenu(Menu menu)
         {
-            if (id != menu.MenuId)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(menu).State = EntityState.Modified;
 
             try
@@ -55,7 +50,7 @@ namespace ThAmCo.Catering.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MenuExists(id))
+                if (!MenuExists(menu.MenuId))
                 {
                     return NotFound();
                 }

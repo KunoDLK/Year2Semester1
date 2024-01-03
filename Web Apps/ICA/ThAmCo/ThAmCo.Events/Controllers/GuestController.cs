@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ThAmCo.Events.API;
 using ThAmCo.Events.Data;
 using ThAmCo.Events.DatabaseContexts;
+using ThAmCo.Events.Models;
 
 namespace ThAmCo.Events.Controllers
 {
@@ -9,9 +11,12 @@ namespace ThAmCo.Events.Controllers
     {
         public EventDbContext DatabaseContext { get; set; }
 
+        private APIController<EventType> EventTypeAPI { get; set; }
+
         public GuestController(EventDbContext context)
         {
             DatabaseContext = context;
+            EventTypeAPI = new APIController<EventType>(BaseAPI.APIType.Venues, "eventtypes");
         }
 
         // GET: GuestsController
@@ -52,7 +57,7 @@ namespace ThAmCo.Events.Controllers
         {
             Guest editGuest;
 
-            editGuest = DatabaseContext.Guests.FirstOrDefault(editGuest => editGuest.Id == id); 
+            editGuest = DatabaseContext.Guests.FirstOrDefault(editGuest => editGuest.Id == id);
 
             return View(editGuest);
         }
@@ -64,7 +69,7 @@ namespace ThAmCo.Events.Controllers
         {
             try
             {
-                var DBGuest = DatabaseContext.Guests.First(x=> x.Id == id);
+                var DBGuest = DatabaseContext.Guests.First(x => x.Id == id);
                 DBGuest.Name = updatedGuest.Name;
                 DBGuest.ContactPhoneNumber = updatedGuest.ContactPhoneNumber;
                 DBGuest.Banned = updatedGuest.Banned;
@@ -79,9 +84,15 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: GuestsController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            ViewBag.EventTypes = await EventTypeAPI.Get();
+
+            var events = DatabaseContext.GuestBookings.Where(x => x.GuestID == id).Select(x => x.EventID).ToList();
+
+            List<Event> returnlist = DatabaseContext.Events.Where(x => events.Contains(x.Id)).ToList();
+
+            return View(returnlist);
         }
     }
 }

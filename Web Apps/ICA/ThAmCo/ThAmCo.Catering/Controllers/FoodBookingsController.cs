@@ -44,31 +44,12 @@ namespace ThAmCo.Catering.Controllers
 
         // PUT: api/FoodBookings/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFoodBooking(int id, FoodBooking foodBooking)
+        [HttpPut]
+        public async Task<IActionResult> PutFoodBooking(FoodBooking foodBooking)
         {
-            if (id != foodBooking.Id)
-            {
-                return BadRequest();
-            }
-
             _context.Entry(foodBooking).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FoodBookingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

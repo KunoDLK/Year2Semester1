@@ -38,8 +38,9 @@
                     @Html.DisplayFor(modelItem => item.Banned)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a id="Delete" data-item="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">View Booked-in Events</a>
+
                 </td>
             </tr>
         }

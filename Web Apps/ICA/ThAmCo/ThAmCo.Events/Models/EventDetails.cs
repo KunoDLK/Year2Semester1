@@ -11,7 +11,7 @@ namespace ThAmCo.Events.Models
         public List<Guest> Guests { get; set; }
 
         public Menu Menu { get; set; }
-
+            
         public FoodBooking FoodBooking { get; set; }
 
         public Dictionary<int, string> Menus { get; set; }

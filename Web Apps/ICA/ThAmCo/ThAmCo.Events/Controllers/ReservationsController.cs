@@ -14,9 +14,9 @@ namespace ThAmCo.Events.Controllers
         }
 
         // GET: VenueController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            List<Reservation> reservation = new List<Reservation>();
+            var reservation = await APIController.Get();
 
             return View(reservation);
         }

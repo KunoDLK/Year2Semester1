@@ -4,64 +4,146 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    <h1>
-        Event information:
-    </h1>
-    <h2>
-        Name: @Model.Event.Name
-    </h2>
-    <h2>
-        Date: @Model.Event.StartTime.ToString("dd/MM/yyyy")
-    </h2>
-    <h2>
-        Start Time: @Model.Event.StartTime.ToString("hh:mm")
-    </h2>
-    <h2>
-        End Time: @Model.Event.EndTime.ToString("hh:mm")
-    </h2>
-    <div>
-        <h2>Menu</h2>
-        
-        <form method="post" asp-action="SetMenu">
-            <select name="menuId">
-                <option value="null">-- Select --</option>
-                @if (Model.Menus != null)
-                {
-                    @foreach (var menu in Model.Menus)
-                    {
-                        <option value="@menu.Key">@menu.Value</option>
-                    }
-                }
-            </select>
 
-            <input type="hidden" name="foodbookingid" value="@Model.Event.foodBookingID" />
+    <div class="column">
 
-            <input type="hidden" name="eventId" value="@Model.Event.Id" />
-                  
-            <button type="submit">Set Menu</button>
-        </form>
+        <h1>
+            Event information:
+        </h1>
+        <h2>
+            Name: @Model.Event.Name
+        </h2>
+        <h2>
+            Date: @Model.Event.StartTime.ToString("dd/MM/yyyy")
+        </h2>
+        <h2>
+            Start Time: @Model.Event.StartTime.ToString("hh:mm")
+        </h2>
+        <h2>
+            End Time: @Model.Event.EndTime.ToString("hh:mm")
+        </h2>
+        <div>
+            <h2>Catering:</h2>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Price</td>
-                </tr>
-            </thead>
             @if (Model.Menu != null)
             {
-                <tbody id="@($"SelectedMenu{Model.Menu.MenuId}")" data-id="@Model.Menu.MenuId">
-                </tbody>
+                <h3> Food Ordered</h3>
+                <p>Booking Id:@Model.FoodBooking.Id</p>
+                <p>Booking Quanintity: @Model.FoodBooking.NumberOfGuests</p>
             }
-            else
+
+            @if (Model.Menu != null)
             {
-                <tbody id="@($"SelectedMenu")">
-                </tbody>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Price</td>
+                        </tr>
+                    </thead>
+                    <tbody id="@($"MeunItems{Model.Menu.MenuId}")" data-id="@Model.Menu.MenuId">
+                    </tbody>
+
+                </table>
             }
-        </table>
+
+            <h3> Change/Order Catering</h3>
+            <form method="post" asp-action="SetMenu">
+                <select name="menuId">
+                    @if (Model.Menus != null)
+                    {
+                        @foreach (var menu in Model.Menus)
+                        {
+                            <option value="@menu.Key">@menu.Value</option>
+                        }
+                    }
+                </select>
+
+                <input type="hidden" name="foodbookingid" value="@Model.Event.foodBookingID" />
+
+                <input type="hidden" name="eventId" value="@Model.Event.Id" />
+
+                <button type="submit">Order</button>
+            </form>
+            @if (Model.Menu != null)
+            {
+                <form asp-action="ChangeOrderQuantity">
+
+                    <input type="hidden" name="eventId" value="@Model.Event.Id" />
+
+                    <input type="hidden" name="foodbookingid" value="@Model.Event.foodBookingID" />
+
+                    <input type="number" name="OrderQuantity" value="@Model.Guests.Count"/>
+
+                    <button type="submit">Update Order Quantity</button>
+                </form>
+                
+                <form asp-action="CancelFood">
+
+                    <input type="hidden" name="eventId" value="@Model.Event.Id" />
+
+                    <input type="hidden" name="foodbookingid" value="@Model.Event.foodBookingID" />
+
+                    <button type="submit">Cancel Food</button>
+                </form>
+            }
+        </div>
+
     </div>
-    <div>
-        Staffing
+    <div class="column">
+
+        <h2> Guests </h2>
+        <form asp-action="AddGuest">
+
+            <input type="hidden" name="eventId" value="@Model.Event.Id" />
+
+            <h4> Name:</h4>
+            <input type="text" name="Name" />
+
+            <h4> Phone Number:</h4>
+            <input type="text" name="PhoneNumber" />
+
+            <button type="submit">Add Guest</button>
+
+        </form>
+
+        @if (Model.Guests != null && Model.Guests.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Phone Number
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Guests)
+                    {
+                        <tr id="Guest{@item.Id}">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ContactPhoneNumber)
+                            </td>
+                            <td>
+                                <form asp-action="RemoveGuest" asp-route-id="@item.Id">
+                                    <input type="hidden" name="eventId" value="@Model.Event.Id" />
+                                    <input type="submit" value="Remove Guest" />
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 }
 
