@@ -20,6 +20,10 @@ namespace ThAmCo.Events.Controllers
 
         private EventDbContext DbContext { get; set; }
 
+        /// <summary>
+        /// Constructor of event controller
+        /// </summary>
+        /// <param name="dbContext">database context</param>
         public EventController(EventDbContext dbContext)
         {
             DbContext = dbContext;
@@ -29,6 +33,10 @@ namespace ThAmCo.Events.Controllers
             FoodBookingAPI = new APIController<FoodBooking>(BaseAPI.APIType.Catering, "foodbookings");
         }
 
+/// <summary>
+/// returns list of Event Types
+/// </summary>
+/// <returns></returns>
         public async Task<IActionResult> Index()
         {
             ViewBag.EventTypes = await EventTypeAPI.Get();
@@ -39,6 +47,10 @@ namespace ThAmCo.Events.Controllers
             return View(events);
         }
 
+        /// <summary>
+        /// Creates a new Event
+        /// </summary>
+        /// <returns> view to edit the new event</returns>
         public async Task<IActionResult> Create()
         {
             var newEvent = new Models.EventCreation();
@@ -54,6 +66,11 @@ namespace ThAmCo.Events.Controllers
             return View("Edit", newEvent);
         }
 
+        /// <summary>
+        /// Edits an events base properties 
+        /// </summary>
+        /// <param name="id"> event id</param>
+        /// <returns>view to edit an event </returns>
         public async Task<IActionResult> Edit(int id)
         {
             var retrivedEvent = DbContext.Events.FirstOrDefault(e => e.Id == id);
@@ -69,6 +86,11 @@ namespace ThAmCo.Events.Controllers
             return View(retrivedEvent);
         }
 
+        /// <summary>
+        /// Deletes an event
+        /// </summary>
+        /// <param name="id">id of event to delete</param>
+        /// <returns>redirect to index</returns>
         public IActionResult Delete(int id)
         {
             Data.Event deleteEvent = new Data.Event { Id = id };
@@ -80,6 +102,11 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Submitted event with modification 
+        /// </summary>
+        /// <param name="submittedEvent">event to update</param>
+        /// <returns>redirect to index</returns>
         public IActionResult Submit(Models.EventCreation submittedEvent)
         {
             var databaseEvent = DbContext.Events.FirstOrDefault(x => x.Id == submittedEvent.Event.Id);
@@ -97,6 +124,11 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Gets details of a event 
+        /// </summary>
+        /// <param name="id">id of event</param>
+        /// <returns>details view</returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -122,6 +154,13 @@ namespace ThAmCo.Events.Controllers
             return View("Details", eventDetails);
         }
 
+        /// <summary>
+        /// Sets menu for an event
+        /// </summary>
+        /// <param name="menuId">id of menu</param>
+        /// <param name="eventId">id of event</param>
+        /// <param name="foodBookingId">optional foodbooking id if we are editing a event food order </param>
+        /// <returns> modified details view </returns>
         public async Task<IActionResult> SetMenu(int? menuId, int eventId, int? foodBookingId)
         {
             if (menuId == null || eventId == null)
@@ -156,6 +195,12 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Details", new { id = eventId });
         }
 
+        /// <summary>
+        /// Cancels food order
+        /// </summary>
+        /// <param name="eventId"> event to remove food order </param>
+        /// <param name="foodBookingId"> id of food booking </param>
+        /// <returns></returns>
         public async Task<IActionResult> CancelFood(int eventId, int foodBookingId)
         {
             await FoodBookingAPI.Delete(foodBookingId);
@@ -169,6 +214,13 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Details", new { id = eventId });
         }
 
+        /// <summary>
+        /// adds a guest to a event 
+        /// </summary>
+        /// <param name="eventId"> id of event</param>
+        /// <param name="name"> name of guest</param>
+        /// <param name="phonenumber">phone number of guest </param>
+        /// <returns></returns>
         public async Task<IActionResult> AddGuest(int eventId, string name, string phonenumber)
         {
             //try to find guest
@@ -198,6 +250,12 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Details", new { id = eventId });
         }
 
+        /// <summary>
+        /// Removes a guest from an event
+        /// </summary>
+        /// <param name="id"> id of guest </param>
+        /// <param name="eventId"> event to remove guest from </param>
+        /// <returns></returns>
         public async Task<IActionResult> RemoveGuest(int id, int eventId)
         {
             var guestBooking = DbContext.GuestBookings.First(x => x.EventID == eventId && x.GuestID == id);
@@ -207,6 +265,13 @@ namespace ThAmCo.Events.Controllers
             return RedirectToAction("Details", new { id = eventId });
         }
 
+        /// <summary>
+        /// Changes food order quantity
+        /// </summary>
+        /// <param name="eventId"> event to effect </param>
+        /// <param name="foodBookingId"> id of food booking </param>
+        /// <param name="orderQuantity"> quantity to set</param>
+        /// <returns></returns>
         public async Task<IActionResult> ChangeOrderQuantity(int eventId, int foodBookingId, int orderQuantity)
         {
             var foodBooking = await FoodBookingAPI.Get(foodBookingId);
