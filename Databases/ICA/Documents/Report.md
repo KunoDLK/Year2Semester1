@@ -518,14 +518,18 @@ Return Data:
 ---
 Query:
 ```sql
-
+SELECT *
+FROM dbo.person
+WHERE height IS NULL OR weight IS NULL
 ```
 Output:
 ```
+(0 rows affected)
 
+Completion time: 2024-01-04T01:20:14.4590986+00:00
 ```
 Return Data:
-
+No Matching data
 ---
 ### Module 6: Working with Data Types
 
@@ -533,13 +537,31 @@ Return Data:
 ---
 Query:
 ```sql
+-- Declare a variable of type INT
+DECLARE @myInt INT;
 
+-- Assign a value to the variable
+SET @myInt = 5;
+
+-- Print the value of the variable
+PRINT @myInt;
+
+-- Declare a variable of type VARCHAR
+DECLARE @myString VARCHAR(50);
+
+-- Assign a value to the variable
+SET @myString = 'Hello World!';
+
+-- Print the value of the variable
+PRINT @myString
 ```
 Output:
 ```
+5
+Hello World!
 
+Completion time: 2024-01-04T01:42:53.2438476+00:00
 ```
-Return Data:
 
 ---
 #### Demo D2: Working with Character Data
@@ -559,13 +581,27 @@ Return Data:
 ---
 Query:
 ```sql
+-- Get the current date and time
+SELECT GETDATE() AS 'Current Date and Time';
 
-```
-Output:
-```
+-- Get the current date
+SELECT CAST(GETDATE() AS DATE) AS 'Current Date';
 
+-- Get the current time
+SELECT CAST(GETDATE() AS TIME) AS 'Current Time';
+
+-- Add 5 days to the current date
+SELECT DATEADD(DAY, 5, GETDATE()) AS 'Date + 5 Days';
+
+-- Subtract 5 days from the current date
+SELECT DATEADD(DAY, -5, GETDATE()) AS 'Date - 5 Days';
+
+-- Add 1 hour to the current time
+SELECT DATEADD(HOUR, 1, GETDATE()) AS 'Time + 1 Hour';
+
+-- Subtract 1 hour from the current time
+SELECT DATEADD(HOUR, -1, GETDATE()) AS 'Time - 1 Hour
 ```
-Return Data:
 
 ---
 ### Module 7: Using DML to Modify Data
@@ -574,40 +610,32 @@ Return Data:
 ---
 Query:
 ```sql
-INSERT INTO dbo.event (sport_id, event_name) 
-VALUES ((SELECT id FROM dbo.sport WHERE sport_name = 'Military Ski Patrol'), 'Mens Induvidual Military'
+INSERT INTO dbo.competitor_event (event_id, competitor_id, medal_id)
+VALUES
+    (1, 101, 201),
+    (2, 102, 202)
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### Demo E2: Modifying and Removing Data
 ---
 Query:
 ```sql
-
+-- Update medal_id for a specific competitor and event
+UPDATE dbo.competitor_event
+SET medal_id = 203
+WHERE competitor_id = 101 AND event_id = 1;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### Demo E3: Generating Automatic Column Values
 ---
 Query:
 ```sql
-
+-- Assuming id is an identity column
+INSERT INTO dbo.event (sport_id, event_name)
+VALUES (301, 'NewEventName');
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### Module 8: Using Built-In Functions
@@ -616,52 +644,47 @@ Return Data:
 ---
 Query:
 ```sql
-
+SELECT g.games_name, AVG(gc.age) AS average_age
+FROM dbo.games_competitor gc
+JOIN dbo.games g ON gc.games_id = g.id
+GROUP BY g.games_name;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### Demo F2: Using Conversion Functions
 ---
 Query:
 ```sql
-
+SELECT full_name, age, CAST(age AS DECIMAL(5, 2)) AS age_decimal
+FROM dbo.games_competitor;
 ```
-Output:
+```sql
+SELECT games_name, FORMAT(games_year, 'yyyy') AS formatted_games_year
+FROM dbo.games;
 ```
-
-```
-Return Data:
 
 ---
 #### Demo F3: Using Logical Functions
 ---
 Query:
 ```sql
-
+SELECT full_name, age,
+       CASE 
+           WHEN age < 18 THEN 'Junior'
+           WHEN age BETWEEN 18 AND 30 THEN 'Young Adult'
+           ELSE 'Senior'
+       END AS age_category
+FROM dbo.games_competitor;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### Demo F4: Using Functions to Work with NULL
 ---
 Query:
 ```sql
-
+SELECT full_name, NULLIF(weight, 0) AS actual_weight
+FROM dbo.person;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ## TSQL Part 2: SQL Server Coding Functions and Features
@@ -672,39 +695,33 @@ Return Data:
 ---
 Query:
 ```sql
-
+SELECT AVG(height) AS average_height
+FROM dbo.person;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: Using the GROUP BY Clause
 ---
 Query:
 ```sql
+SELECT c.city_name, COUNT(gc.id) AS competitor_count
+FROM dbo.city c
+JOIN dbo.games_competitor gc ON c.id = gc.city_id
+GROUP BY c.city_name;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
-#### ICA Demo 3: Filtering Groups with HAVING 
+#### ICA Demo 3: Filtering Groups with HAVING
 ---
 Query:
 ```sql
-
+SELECT c.city_name, COUNT(gc.id) AS competitor_count
+FROM dbo.city c
+JOIN dbo.games_competitor gc ON c.id = gc.city_id
+GROUP BY c.city_name
+HAVING COUNT(gc.id) > 5;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL10: Using Subqueries
@@ -713,39 +730,34 @@ Return Data:
 ---
 Query:
 ```sql
-
+SELECT full_name, age
+FROM dbo.games_competitor gc
+WHERE age > (SELECT AVG(age) FROM dbo.games_competitor);
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: Writing Correlated Subqueries
 ---
 Query:
 ```sql
-
+SELECT full_name, age
+FROM dbo.games_competitor gc
+WHERE age > (SELECT AVG(age) FROM dbo.games_competitor WHERE city_id = gc.city_id);
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 3: Using the EXISTS Predicate with Subqueries
 ---
 Query:
 ```sql
-
+SELECT city_name
+FROM dbo.city c
+WHERE EXISTS (
+    SELECT 1
+    FROM dbo.games_competitor
+    WHERE city_id = c.id
+);
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL11: Using Table Expressions
@@ -754,52 +766,66 @@ Return Data:
 ---
 Query:
 ```sql
+-- Creating a view
+CREATE VIEW CompetitorCityView AS
+SELECT pc.full_name, pc.age, c.city_name
+FROM dbo.games_competitor pc
+JOIN dbo.city c ON pc.city_id = c.id;
 
+-- Querying the view
+SELECT *
+FROM CompetitorCityView;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: Using Inline TVFs
 ---
 Query:
 ```sql
+-- Creating an inline TVF
+CREATE FUNCTION GetCompetitorsInCity (@cityId INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT pc.full_name, pc.age
+    FROM dbo.games_competitor pc
+    WHERE pc.city_id = @cityId
+);
 
+-- Using the inline TVF
+SELECT *
+FROM dbo.GetCompetitorsInCity(1); -- Replace 1 with the desired city_id
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 3: Using Derived Tables
 ---
 Query:
 ```sql
-
+-- Using a derived table
+SELECT dt.full_name, dt.age, dt.city_name
+FROM (
+    SELECT pc.full_name, pc.age, c.city_name
+    FROM dbo.games_competitor pc
+    JOIN dbo.city c ON pc.city_id = c.id
+) AS dt;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICADemo 4: Using CTEs
 ---
 Query:
 ```sql
+-- Using a CTE
+WITH EventSportCTE AS (
+    SELECT e.event_name, s.sport_name
+    FROM dbo.event e
+    JOIN dbo.sport s ON e.sport_id = s.id
+)
+SELECT * FROM EventSportCTE;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL12: Using Views and Set Operators
@@ -808,39 +834,59 @@ Return Data:
 ---
 Query:
 ```sql
+-- Using UNION to combine competitors from different cities
+SELECT full_name, city_id
+FROM dbo.games_competitor
+WHERE city_id = 1
 
-```
-Output:
-```
+UNION
 
+SELECT full_name, city_id
+FROM dbo.games_competitor
+WHERE city_id = 2;
 ```
-Return Data:
 
 ---
 #### ICA Demo 2: More on set operators
 ---
 Query:
 ```sql
+-- Using INTERSECT to find competitors winning gold in both events
+SELECT full_name
+FROM dbo.competitor_event
+WHERE event_id = 1 AND medal_id = 1
 
-```
-Output:
-```
+INTERSECT
 
+SELECT full_name
+FROM dbo.competitor_event
+WHERE event_id = 2 AND medal_id = 1;
 ```
-Return Data:
 
 ---
 #### ICA Demo 3: Create inline Table-valued Function
 ---
 Query:
 ```sql
+-- Creating an inline TVF
+CREATE FUNCTION GetCompetitorsInCity
+(
+    @cityId INT
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT full_name, age
+    FROM dbo.games_competitor
+    WHERE city_id = @cityId
+);
+
+-- Using the inline TVF
+SELECT *
+FROM dbo.GetCompetitorsInCity(1); -- Replace 1 with the desired city_id
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL13: Using Window Ranking, Offset, and Aggregate Functions
@@ -849,52 +895,61 @@ Return Data:
 ---
 Query:
 ```sql
-
+-- Using ROW_NUMBER() with PARTITION BY
+SELECT
+    full_name,
+    age,
+    city_id,
+    ROW_NUMBER() OVER (PARTITION BY city_id ORDER BY age) AS row_num
+FROM
+    dbo.games_competitor;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA TSQL Demo 2 - Windows Ranking (or Windows Rank with partition)
 ---
 Query:
 ```sql
-
+-- Using RANK() with PARTITION BY
+SELECT
+    full_name,
+    age,
+    city_id,
+    RANK() OVER (PARTITION BY city_id ORDER BY age) AS ranking
+FROM
+    dbo.games_competitor;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA TSQL Demo 3 - OVER Clause (or CTE Function with Over)
 ---
 Query:
 ```sql
+-- Using ROW_NUMBER() with OVER clause
+SELECT
+    full_name,
+    age,
+    city_id,
+    ROW_NUMBER() OVER (PARTITION BY city_id ORDER BY age) AS row_num
+FROM
+    dbo.games_competitor;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA TSQL Demo 4 - Writing Aggregate function in Partition By
 ---
 Query:
 ```sql
-
+-- Using SUM() aggregate function with PARTITION BY
+SELECT
+    full_name,
+    age,
+    city_id,
+    SUM(age) OVER (PARTITION BY city_id) AS total_age_in_city
+FROM
+    dbo.games_competitor;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL14: Pivoting and Grouping Sets
@@ -903,26 +958,55 @@ Return Data:
 ---
 Query:
 ```sql
-
+-- Using GROUPING SETS for multi-level aggregation
+SELECT
+    COALESCE(c.city_name, 'Total') AS city_name,
+    COALESCE(s.sport_name, 'Total') AS sport_name,
+    COUNT(ce.medal_id) AS total_medals
+FROM
+    dbo.city c
+FULL JOIN dbo.games_city gc ON c.id = gc.city_id
+FULL JOIN dbo.games g ON gc.games_id = g.id
+FULL JOIN dbo.event e ON g.id = e.games_id
+FULL JOIN dbo.sport s ON e.sport_id = s.id
+FULL JOIN dbo.competitor_event ce ON e.id = ce.event_id
+FULL JOIN dbo.medal m ON ce.medal_id = m.id
+GROUP BY
+    GROUPING SETS (
+        (c.city_name, s.sport_name),
+        (c.city_name),
+        ()
+    );
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: Writing Queries with PIVOT and UNPIVOT
 ---
 Query:
 ```sql
+-- Using PIVOT to transform medal counts by sport
+SELECT
+    city_name,
+    [Basketball] AS Basketball_Medals,
+    [Swimming] AS Swimming_Medals,
+    [Athletics] AS Athletics_Medals
+FROM
+    (
+        SELECT c.city_name, s.sport_name, COUNT(ce.medal_id) AS medal_count
+        FROM dbo.city c
+        LEFT JOIN dbo.games_city gc ON c.id = gc.city_id
+        LEFT JOIN dbo.games g ON gc.games_id = g.id
+        LEFT JOIN dbo.event e ON g.id = e.games_id
+        LEFT JOIN dbo.sport s ON e.sport_id = s.id
+        LEFT JOIN dbo.competitor_event ce ON e.id = ce.event_id
+        GROUP BY c.city_name, s.sport_name
+    ) AS MedalCounts
+PIVOT
+    (
+        SUM(medal_count) FOR sport_name IN ([Basketball], [Swimming], [Athletics])
+    ) AS PivotTable;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ## TSQL Part 3: SQL Server Programming
@@ -933,26 +1017,47 @@ Return Data:
 ---
 Query:
 ```sql
+-- Creating a stored procedure to get competitors in a specific city
+CREATE PROCEDURE GetCompetitorsInCity
 
+AS
+BEGIN
+    SELECT
+        full_name,
+        age
+    FROM
+        dbo.games_competitor
+    
+END;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: TSQL Stored Procedures with Parameters
 ---
 Query:
 ```sql
-
+-- Creating a stored procedure with parameters
+CREATE PROCEDURE GetCompetitorsBySport
+    @sportId INT,
+    @minAge INT,
+    @maxAge INT
+AS
+BEGIN
+    SELECT
+        pc.full_name,
+        pc.age,
+        s.sport_name
+    FROM
+        dbo.games_competitor pc
+    INNER JOIN
+        dbo.event e ON pc.games_id = e.games_id
+    INNER JOIN
+        dbo.sport s ON e.sport_id = s.id
+    WHERE
+        s.id = @sportId
+        AND pc.age BETWEEN @minAge AND @maxAge;
+END;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL16: Programming with T-SQL
@@ -961,26 +1066,46 @@ Return Data:
 ---
 Query:
 ```sql
+-- Creating a stored procedure
+CREATE PROCEDURE GetCompetitorsBySport
+    @sportId INT,
+    @minAge INT,
+    @maxAge INT
+AS
+BEGIN
+    SELECT
+        pc.full_name,
+        pc.age,
+        s.sport_name
+    FROM
+        dbo.games_competitor pc
+    INNER JOIN
+        dbo.event e ON pc.games_id = e.games_id
+    INNER JOIN
+        dbo.sport s ON e.sport_id = s.id
+    WHERE
+        s.id = @sportId
+        AND pc.age BETWEEN @minAge AND @maxAge;
+END;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: T-SQL programming with Parameters
 ---
 Query:
 ```sql
+DECLARE @CityID INT = 1;
+
+SELECT
+    full_name,
+    age
+FROM
+    dbo.games_competitor
+WHERE
+    city_id = @CityID;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL Module 17: Implementing Error Handling
@@ -989,53 +1114,82 @@ Return Data:
 ---
 Query:
 ```sql
+BEGIN TRY
+    -- T-SQL code that may cause an error
+    DECLARE @Result INT;
+    SET @Result = 10 / 0; -- This will cause a divide-by-zero error
+END TRY
+BEGIN CATCH
+    -- T-SQL code to handle the error
+    PRINT 'An error occurred: ' + ERROR_MESSAGE();
+END CATCH;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 #### ICA Demo 2: Implementing Structured Exception Handling
 ---
 Query:
 ```sql
-
+BEGIN TRY
+    -- T-SQL code that may cause an error
+    DECLARE @Result INT;
+    SET @Result = 10 / 0; -- This will cause a divide-by-zero error
+END TRY
+BEGIN CATCH
+    -- T-SQL code to handle the error
+    PRINT 'An error occurred: ' + ERROR_MESSAGE();
+    
+    -- You can include additional handling logic here
+    
+    -- Optionally, you can rethrow the exception
+    THROW;
+END CATCH;
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
 ### TSQL Module 18: Implementing Transactions
 
 #### ICA Demo 1: Transactions
 ---
-Query:
+Starting:
 ```sql
-
-```
-Output:
+BEGIN TRANSACTION;
 ```
 
+Rollback if you accidently delete production database:
+```sql
+ROLLBACK;
 ```
-Return Data:
 
+if you actually update the database correctly:
+```sql
+COMMIT;
+```
 ---
 #### ICA Demo 2: Controlling Transactions
 ---
 Query:
 ```sql
+BEGIN TRANSACTION;
+
+BEGIN TRY
+    -- Perform operations within the transaction
+    UPDATE dbo.YourTable
+    SET Column1 = 'NewValue'
+    WHERE Condition;
+
+    -- If everything is successful, commit the transaction
+    COMMIT;
+END TRY
+BEGIN CATCH
+    -- If an error occurs, roll back the transaction
+    ROLLBACK;
+
+    -- Handle the error or log it
+    PRINT 'An error occurred: ' + ERROR_MESSAGE();
+END CATCH;
 
 ```
-Output:
-```
-
-```
-Return Data:
 
 ---
